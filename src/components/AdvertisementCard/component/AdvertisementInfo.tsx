@@ -1,7 +1,7 @@
 import { CardContent, CardMedia, Typography } from '@mui/material';
 import { TAdvertisement } from 'types/Advertisement';
 import EllipsisText from 'ui/EllipsisText';
-import { formatDate } from 'utils/helpers';
+import { formatDate, formatNumber } from 'utils/helpers';
 
 interface AdvertisementInfoProps {
   content: TAdvertisement;
@@ -28,7 +28,7 @@ const AdvertisementInfo: React.FC<AdvertisementInfoProps> = ({ content }) => {
           {price} ₽
         </Typography>
         <Typography variant='body2' color='text.secondary'>
-          Просмотров: {views} | Лайков: {likes}
+          Просмотров: {formatNumber(views)} | Лайков: {formatNumber(likes)}
         </Typography>
         <Typography variant='body2' color='text.secondary'>
           Дата добавления: {formatDate(createdAt)}

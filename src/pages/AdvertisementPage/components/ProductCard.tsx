@@ -1,7 +1,7 @@
 import { Box, Typography, Button, CardMedia } from '@mui/material';
 import { colors, sizes } from 'utils/styles';
 import { TAdvertisement } from 'types/Advertisement';
-import { formatDate } from 'utils/helpers';
+import { formatDate, formatNumber } from 'utils/helpers';
 import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
@@ -82,8 +82,8 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product, handleGoBack }
           },
         }}
       >
-        <InfoItem icon={<RemoveRedEyeIcon />} text={`Просмотры: ${product.views}`} />
-        <InfoItem icon={<ThumbUpIcon />} text={`Лайки: ${product.likes}`} />
+        <InfoItem icon={<RemoveRedEyeIcon />} text={`Просмотры: ${formatNumber(product.views)}`} />
+        <InfoItem icon={<ThumbUpIcon />} text={`Лайки: ${formatNumber(product.likes)}`} />
         <InfoItem icon={<AlarmOnIcon />} text={`Дата создания: ${formatDate(product.createdAt)}`} />
       </Box>
 
