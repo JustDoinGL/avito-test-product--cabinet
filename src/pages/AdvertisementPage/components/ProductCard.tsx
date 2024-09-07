@@ -1,14 +1,13 @@
 import { Box, Typography, Button, CardMedia } from '@mui/material';
 import { colors, sizes } from 'utils/styles';
 import { TAdvertisement } from 'types/Advertisement';
-import ProductDescription from './ProductDescription';
-import BackButton from 'ui/BackIcon';
 import { formatDate } from 'utils/helpers';
 import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import InfoItem from './Infot';
+import InfoItem from './InfoItem';
 import useResponsiveDimensions from 'hooks/useResponsiveDimensions';
+import { BackButton, EllipsisText, CustomDescription } from 'ui';
 
 type ProductDetailsProps = {
   product: TAdvertisement;
@@ -61,9 +60,10 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product, handleGoBack }
         )}
       </Box>
 
-      <Typography variant='h1' component='h1' sx={{ mb: 2, textAlign: 'center' }}>
-        {product.name}
-      </Typography>
+      <EllipsisText
+        sx={{ marginBottom: 2, textAlign: 'center', fontSize: '2rem', fontWeight: '700' }}
+        text={product.name}
+      />
 
       <Typography variant='h3' component='p' sx={{ mb: 2, textAlign: 'center', color: colors.success }}>
         {product.price} ₽
@@ -87,7 +87,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product, handleGoBack }
         <InfoItem icon={<AlarmOnIcon />} text={`Дата создания: ${formatDate(product.createdAt)}`} />
       </Box>
 
-      {product.description && <ProductDescription description={product.description} />}
+      {product.description && <CustomDescription description={product.description} />}
 
       <Box
         sx={{
