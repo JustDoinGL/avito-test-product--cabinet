@@ -4,4 +4,5 @@ export const sizes = {
   laptop: '1024px',
   desktop: '1440px',
   largeDesktop: '1920px',
+  maxWidth: '1000px'
 };

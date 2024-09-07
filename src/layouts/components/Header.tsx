@@ -1,10 +1,5 @@
-import React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
+import { Box, AppBar, Toolbar, IconButton, useMediaQuery } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import { useMediaQuery } from '@mui/material';
 import Navigation from './Navigation';
 import { sizes } from 'utils/styles';
 

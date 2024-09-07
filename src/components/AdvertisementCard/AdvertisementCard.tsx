@@ -1,12 +1,12 @@
 import React from 'react';
 import { Card } from '@mui/material';
-import { Advertisement } from 'types/Advertisement';
+import { TAdvertisement } from 'types/Advertisement';
 import { Link } from 'react-router-dom';
 import { RoutePaths } from 'utils/routes/routes';
 import { AdvertisementInfo, AdvertisementMenu, MenuButton } from './component';
 
 interface AdvertisementCardProps {
-  content: Advertisement;
+  content: TAdvertisement;
 }
 
 const AdvertisementCard: React.FC<AdvertisementCardProps> = ({ content }) => {
