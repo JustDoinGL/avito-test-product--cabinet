@@ -1,4 +1,4 @@
-export type Advertisement = {
+export type TAdvertisement = {
   /* Уникальный идентификатор. */
   id: string;
   /* Название. */

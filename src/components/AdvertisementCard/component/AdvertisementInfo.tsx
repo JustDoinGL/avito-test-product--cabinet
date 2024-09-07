@@ -1,9 +1,9 @@
-import React from 'react';
 import { CardContent, CardMedia, Typography } from '@mui/material';
-import { Advertisement } from 'types/Advertisement';
+import { TAdvertisement } from 'types/Advertisement';
+import { formatDate } from 'utils/helpers';
 
 interface AdvertisementInfoProps {
-  content: Advertisement;
+  content: TAdvertisement;
 }
 
 const AdvertisementInfo: React.FC<AdvertisementInfoProps> = ({ content }) => {
@@ -31,7 +31,7 @@ const AdvertisementInfo: React.FC<AdvertisementInfoProps> = ({ content }) => {
           Просмотров: {views} | Лайков: {likes}
         </Typography>
         <Typography variant='body2' color='text.secondary'>
-          Дата добавления: {new Date(createdAt).toLocaleDateString()}
+          Дата добавления: {formatDate(createdAt)}
         </Typography>
       </CardContent>
     </>
