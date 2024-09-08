@@ -1,4 +1,4 @@
-import AdvertisementForm from 'components/AdvertisementForm/AdvertisementForm';
+import AdvertisementForm from 'components/Advertisement/AdvertisementForm/AdvertisementForm';
 import useGlobalStore from 'store/useStore';
 import CustomModal from 'ui/CustomModal';
 

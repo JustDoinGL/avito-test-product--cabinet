@@ -9,7 +9,7 @@ import InfoItem from './InfoItem';
 import useResponsiveDimensions from 'hooks/useResponsiveDimensions';
 import { BackButton, EllipsisText, CustomDescription, CustomModal } from 'ui';
 import { useState } from 'react';
-import AdvertisementForm from 'components/AdvertisementForm/AdvertisementForm';
+import AdvertisementForm from 'components/Advertisement/AdvertisementForm/AdvertisementForm';
 import { LoadingButton } from '@mui/lab';
 import { deleteAdvertisement } from 'api/advertisements/advertisementsQuery';
 import { toast } from 'react-toastify';
