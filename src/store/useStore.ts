@@ -1,13 +1,18 @@
-// import { create } from 'zustand'
+import { TAdvertisement } from 'types/Advertisement';
+import { create } from 'zustand';
 
-// type StoreState = {
-//   successMessage: string | null;
-//   setSuccessMessage: (message: string | null) => void;
-// };
+type GlobalStore = {
+  isOpen: boolean;
+  setOpen: (isOpen: boolean) => void;
+  advertisementData: TAdvertisement | null;
+  setAdvertisementData: (advertisementData: TAdvertisement) => void;
+};
 
-// const useStore = create<StoreState>((set) => ({
-//   successMessage: null,
-//   setSuccessMessage: (message) => set({ successMessage: message }),
-// }));
+const useGlobalStore = create<GlobalStore>((set) => ({
+  isOpen: false,
+  advertisementData: null,
+  setOpen: (isOpen) => set({ isOpen }),
+  setAdvertisementData: (advertisementData: TAdvertisement) => set({ advertisementData }),
+}));
 
-// export default useStore;
+export default useGlobalStore;

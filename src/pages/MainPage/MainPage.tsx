@@ -1,16 +1,15 @@
-import { Button } from '@mui/material';
-import { toast } from 'react-toastify';
+import AdvertisementForm from 'components/AdvertisementForm/AdvertisementForm';
+import useGlobalStore from 'store/useStore';
+import CustomModal from 'ui/CustomModal';
 
 const MainPage = () => {
+  const { isOpen, setOpen } = useGlobalStore((store) => store);
+  const handleCloseModal = () => setOpen(false);
   return (
     <>
-      <Button
-        onClick={() => {
-          toast('ddd', {});
-        }}
-      >
-        dddd
-      </Button>
+      <CustomModal open={isOpen} onClose={handleCloseModal}>
+        <AdvertisementForm closeModal={handleCloseModal} />
+      </CustomModal>
     </>
   );
 };

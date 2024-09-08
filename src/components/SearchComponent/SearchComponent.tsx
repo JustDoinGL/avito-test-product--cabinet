@@ -2,8 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { TextField, Button, Box } from '@mui/material';
 import useDebounce from 'hooks/useDebounce';
 import { colors, sizes } from 'utils/styles';
+import useGlobalStore from 'store/useStore';
 
-const SearchComponent: React.FC = () => {
+type SearchComponentProps = {
+  isButton: boolean;
+};
+
+const SearchComponent: React.FC<SearchComponentProps> = ({ isButton }) => {
+  const setOpen = useGlobalStore((store) => store.setOpen);
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm);
 
@@ -14,7 +20,6 @@ const SearchComponent: React.FC = () => {
   useEffect(() => {
     if (debouncedSearchTerm) {
       console.log('Debounced Search Term:', debouncedSearchTerm);
-      
     }
   }, [debouncedSearchTerm]);
 
@@ -28,18 +33,20 @@ const SearchComponent: React.FC = () => {
         fullWidth
         sx={{ maxWidth: '300px', borderRadius: '20px' }}
       />
-      <Button
-        variant='contained'
-        color='primary'
-        onClick={() => {}}
-        sx={{
-          maxWidth: '100px',
-          bgcolor: colors.success,
-          [`@media (max-width: ${sizes.tablet})`]: { display: 'none' },
-        }}
-      >
-        Создать задачу
-      </Button>
+      {isButton && (
+        <Button
+          variant='contained'
+          color='primary'
+          onClick={() => setOpen(true)}
+          sx={{
+            maxWidth: '100px',
+            bgcolor: colors.success,
+            [`@media (max-width: ${sizes.tablet})`]: { display: 'none' },
+          }}
+        >
+          Создать объявление
+        </Button>
+      )}
     </Box>
   );
 };
