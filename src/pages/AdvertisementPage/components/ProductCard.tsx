@@ -12,10 +12,10 @@ import { useState } from 'react';
 import AdvertisementForm from 'components/AdvertisementForm/AdvertisementForm';
 import { LoadingButton } from '@mui/lab';
 import { deleteAdvertisement } from 'api/advertisements/advertisementsQuery';
-import useDelete from 'hooks/useDelete';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { RoutePaths } from 'utils/routes/routes';
+import useApi from 'hooks/useApi';
 
 type ProductDetailsProps = {
   product: TAdvertisement;
@@ -26,7 +26,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product, handleGoBack }
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
   const dimensions = useResponsiveDimensions('100%', 300);
-  const { deleteItem, isLoading } = useDelete();
+  const { execute, isLoading } = useApi<string, boolean>();
   const navigate = useNavigate();
 
   const handleOpenCreateModal = () => {
@@ -40,9 +40,9 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product, handleGoBack }
   };
 
   const handleDelete = async () => {
-    const success = await deleteItem(deleteAdvertisement, product.id);
+    const success = await execute(deleteAdvertisement, product.id);
     if (success) {
-      toast('Продукт был удален');
+      toast('Объявление было удалено');
       navigate(RoutePaths.AllAdvertisements);
     } else {
       toast('Ошибка при удалении задачи.');
@@ -102,7 +102,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product, handleGoBack }
       />
 
       <Typography variant='h3' component='p' sx={{ mb: 2, textAlign: 'center', color: colors.success }}>
-        {product.price} ₽
+        {formatNumber(product.price)} ₽
       </Typography>
 
       <Box
@@ -149,7 +149,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product, handleGoBack }
       </Box>
 
       <CustomModal open={isModalOpen} onClose={handleCloseModal}>
-        <AdvertisementForm defaultValues={modalMode === 'edit' ? product : undefined} closeModal={handleCloseModal} />
+        <AdvertisementForm values={modalMode === 'edit' ? product : undefined} closeModal={handleCloseModal} />
       </CustomModal>
     </Box>
   );

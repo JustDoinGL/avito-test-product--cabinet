@@ -9,6 +9,7 @@ interface CustomTextFieldProps<TFieldValues extends FieldValues> {
   type?: 'text' | 'number';
   placeholder?: string;
   sx?: SxProps<Theme>;
+  multiline?: boolean;
 }
 
 const textFieldStyles: SxProps<Theme> = {
@@ -36,6 +37,7 @@ const CustomTextField = <TFieldValues extends FieldValues>({
   type = 'text',
   placeholder,
   sx,
+  multiline = false,
 }: CustomTextFieldProps<TFieldValues>) => {
   return (
     <Controller
@@ -44,7 +46,7 @@ const CustomTextField = <TFieldValues extends FieldValues>({
       render={({ field, fieldState }) => (
         <TextField
           {...field}
-          multiline
+          multiline={multiline}
           label={label}
           error={!!fieldState.error}
           helperText={fieldState.error?.message}

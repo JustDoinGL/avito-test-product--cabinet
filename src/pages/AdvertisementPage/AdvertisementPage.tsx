@@ -1,18 +1,19 @@
 import { Box, Button, Typography } from '@mui/material';
 import { fetchAdvertisementById } from 'api/advertisements/advertisementsQuery';
-import useFetchID from 'hooks/useFetchID';
 import { useNavigate, useParams } from 'react-router-dom';
 import { RoutePaths } from 'utils/routes/routes';
 import ProductDetails from './components/ProductCard';
+import useApi from 'hooks/useApi';
+import { useEffect, useState } from 'react';
+import { TAdvertisement } from 'types/Advertisement';
+import useGlobalStore from 'store/useStore';
 
 const AdvertisementPage: React.FC = () => {
+  const advertisementData = useGlobalStore((store) => store.advertisementData);
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-
-  const { data, isLoading, error } = useFetchID({
-    getData: fetchAdvertisementById,
-    id: id || '',
-  });
+  const [data, setData] = useState<TAdvertisement | null>(advertisementData);
+  const { execute, isLoading, error } = useApi<string, TAdvertisement>();
 
   const handleGoBack = () => {
     if (window.history.length > 2) {
@@ -21,6 +22,24 @@ const AdvertisementPage: React.FC = () => {
       navigate(RoutePaths.AllAdvertisements);
     }
   };
+
+  const fetchData = async (id: string) => {
+    const advertisement = await execute(fetchAdvertisementById, id);
+    if (advertisement) {
+      setData(advertisement);
+    }
+  };
+
+  useEffect(() => {
+    if (id) {
+      if (advertisementData) {
+        setData(advertisementData);
+      } else {
+        fetchData(id);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, advertisementData]);
 
   if (!id || error) {
     return (
@@ -37,8 +56,11 @@ const AdvertisementPage: React.FC = () => {
 
   return (
     <Box>
-      {isLoading && <Typography>Загрузка...</Typography>}
-      {data && <ProductDetails handleGoBack={handleGoBack} product={data} />}
+      {data ? (
+        <ProductDetails handleGoBack={handleGoBack} product={data} />
+      ) : (
+        isLoading && <Typography>Загрузка...</Typography>
+      )}
     </Box>
   );
 };

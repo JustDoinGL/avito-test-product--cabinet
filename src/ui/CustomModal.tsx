@@ -13,7 +13,9 @@ interface CustomModalProps {
 
 const ModalContent = styled(Box)({
   width: '80%',
+  maxHeight: '70%',
   maxWidth: '700px',
+  overflow: 'auto',
   backgroundColor: colors.background,
   borderRadius: '20px',
   borderColor: colors.border,

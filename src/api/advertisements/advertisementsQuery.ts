@@ -1,26 +1,39 @@
 import { pathAdvertisements } from 'api/const';
 import { TAdvertisement } from 'types/Advertisement';
 
-export const fetchAdvertisements = async (start = 0, limit = 10) => {
-  const response = await fetch(`${pathAdvertisements}?_start=${start}&_limit=${limit}`);
-  const data = await response.json();
-  return data;
-};
+// // Fetch Advertisements
+// export const fetchAdvertisements = async (data: { start: number, limit: number }, options?: { signal?: AbortSignal }): Promise<TAdvertisement[]> => {
+//   const { start, limit } = data;
+//   const response = await fetch(`${pathAdvertisements}?_start=${start}&_limit=${limit}`, { signal: options?.signal });
+//   if (!response.ok) {
+//     throw new Error('Network response was not ok');
+//   }
+//   const data = await response.json();
+//   return data;
+// };
 
-export const createAdvertisement = async (advertisement: TAdvertisement) => {
-  const response = await fetch('${pathAdvertisements}', {
+// Create Advertisement
+export const createAdvertisement = async (advertisement: TAdvertisement, options?: { signal?: AbortSignal }): Promise<TAdvertisement> => {
+  const response = await fetch(`${pathAdvertisements}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
     },
     body: JSON.stringify(advertisement),
+    signal: options?.signal,
   });
+
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+
   const data = await response.json();
   return data;
 };
 
-export const fetchAdvertisementById = async (id: string, signal?: AbortSignal): Promise<TAdvertisement> => {
-  const response = await fetch(`${pathAdvertisements}/${id}`, { signal });
+// Fetch Advertisement by ID
+export const fetchAdvertisementById = async (id: string, options?: { signal?: AbortSignal }): Promise<TAdvertisement> => {
+  const response = await fetch(`${pathAdvertisements}/${id}`, { signal: options?.signal });
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
@@ -28,21 +41,35 @@ export const fetchAdvertisementById = async (id: string, signal?: AbortSignal): 
   return data;
 };
 
-export const updateAdvertisement = async (id: string, advertisement: TAdvertisement) => {
-  const response = await fetch(`${pathAdvertisements}/${id}`, {
+// Update Advertisement
+export const updateAdvertisement = async (advertisement: TAdvertisement, options?: { signal?: AbortSignal }): Promise<TAdvertisement> => {
+  const response = await fetch(`${pathAdvertisements}/${advertisement.id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
     },
     body: JSON.stringify(advertisement),
+    signal: options?.signal,
   });
+
+  if (!response.ok) {
+    throw new Error(`Error: ${response.status} ${response.statusText}`);
+  }
+
   const data = await response.json();
   return data;
 };
 
-export const deleteAdvertisement = async (id: string) => {
+// Delete Advertisement
+export const deleteAdvertisement = async (id: string, options?: { signal?: AbortSignal }): Promise<boolean> => {
   const response = await fetch(`${pathAdvertisements}/${id}`, {
     method: 'DELETE',
+    signal: options?.signal,
   });
+
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+
   return response.ok;
 };
