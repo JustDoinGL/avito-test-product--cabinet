@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 
 type UseFetchProps<T> = {
-  getData: (id: string, signal: AbortSignal) => Promise<T>;
+  getData: (id: string, signal?: AbortSignal) => Promise<T>;
   id: string;
 };
 

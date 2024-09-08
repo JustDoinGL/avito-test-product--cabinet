@@ -1,14 +1,21 @@
 import { Box, Typography, Button, CardMedia } from '@mui/material';
 import { colors, sizes } from 'utils/styles';
 import { TAdvertisement } from 'types/Advertisement';
-import ProductDescription from './ProductDescription';
-import BackButton from 'ui/BackIcon';
-import { formatDate } from 'utils/helpers';
+import { formatDate, formatNumber } from 'utils/helpers';
 import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import InfoItem from './Infot';
+import InfoItem from './InfoItem';
 import useResponsiveDimensions from 'hooks/useResponsiveDimensions';
+import { BackButton, EllipsisText, CustomDescription, CustomModal } from 'ui';
+import { useState } from 'react';
+import AdvertisementForm from 'components/AdvertisementForm/AdvertisementForm';
+import { LoadingButton } from '@mui/lab';
+import { deleteAdvertisement } from 'api/advertisements/advertisementsQuery';
+import useDelete from 'hooks/useDelete';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { RoutePaths } from 'utils/routes/routes';
 
 type ProductDetailsProps = {
   product: TAdvertisement;
@@ -16,7 +23,35 @@ type ProductDetailsProps = {
 };
 
 const ProductDetails: React.FC<ProductDetailsProps> = ({ product, handleGoBack }) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
   const dimensions = useResponsiveDimensions('100%', 300);
+  const { deleteItem, isLoading } = useDelete();
+  const navigate = useNavigate();
+
+  const handleOpenCreateModal = () => {
+    setModalMode('create');
+    setIsModalOpen(true);
+  };
+
+  const handleOpenEditModal = () => {
+    setModalMode('edit');
+    setIsModalOpen(true);
+  };
+
+  const handleDelete = async () => {
+    const success = await deleteItem(deleteAdvertisement, product.id);
+    if (success) {
+      toast('Продукт был удален');
+      navigate(RoutePaths.AllAdvertisements);
+    } else {
+      toast('Ошибка при удалении задачи.');
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <Box
@@ -61,9 +96,10 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product, handleGoBack }
         )}
       </Box>
 
-      <Typography variant='h1' component='h1' sx={{ mb: 2, textAlign: 'center' }}>
-        {product.name}
-      </Typography>
+      <EllipsisText
+        sx={{ marginBottom: 2, textAlign: 'center', fontSize: '2rem', fontWeight: '700' }}
+        text={product.name}
+      />
 
       <Typography variant='h3' component='p' sx={{ mb: 2, textAlign: 'center', color: colors.success }}>
         {product.price} ₽
@@ -82,12 +118,12 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product, handleGoBack }
           },
         }}
       >
-        <InfoItem icon={<RemoveRedEyeIcon />} text={`Просмотры: ${product.views}`} />
-        <InfoItem icon={<ThumbUpIcon />} text={`Лайки: ${product.likes}`} />
+        <InfoItem icon={<RemoveRedEyeIcon />} text={`Просмотры: ${formatNumber(product.views)}`} />
+        <InfoItem icon={<ThumbUpIcon />} text={`Лайки: ${formatNumber(product.likes)}`} />
         <InfoItem icon={<AlarmOnIcon />} text={`Дата создания: ${formatDate(product.createdAt)}`} />
       </Box>
 
-      {product.description && <ProductDescription description={product.description} />}
+      {product.description && <CustomDescription description={product.description} />}
 
       <Box
         sx={{
@@ -101,16 +137,20 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product, handleGoBack }
           },
         }}
       >
-        <Button variant='contained' color='success'>
-          Создать новый заказ
+        <Button variant='contained' color='success' onClick={handleOpenCreateModal}>
+          Создать новое объявление
         </Button>
-        <Button variant='contained' color='info'>
-          Редактировать
+        <Button variant='contained' color='info' onClick={handleOpenEditModal}>
+          Редактировать объявление
         </Button>
-        <Button variant='contained' color='error'>
-          Удалить
-        </Button>
+        <LoadingButton loading={isLoading} variant='contained' color='error' onClick={handleDelete}>
+          Удалить объявление
+        </LoadingButton>
       </Box>
+
+      <CustomModal open={isModalOpen} onClose={handleCloseModal}>
+        <AdvertisementForm defaultValues={modalMode === 'edit' ? product : undefined} closeModal={handleCloseModal} />
+      </CustomModal>
     </Box>
   );
 };

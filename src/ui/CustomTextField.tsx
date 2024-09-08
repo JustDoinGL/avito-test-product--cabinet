@@ -44,6 +44,7 @@ const CustomTextField = <TFieldValues extends FieldValues>({
       render={({ field, fieldState }) => (
         <TextField
           {...field}
+          multiline
           label={label}
           error={!!fieldState.error}
           helperText={fieldState.error?.message}

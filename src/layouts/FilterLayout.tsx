@@ -1,4 +1,5 @@
 import { Box } from '@mui/material';
+import SearchComponent from 'components/SearchComponent/SearchComponent';
 import { Outlet } from 'react-router-dom';
 
 type FilterLayoutProps = {
@@ -7,14 +8,11 @@ type FilterLayoutProps = {
 
 const FilterLayout: React.FC<FilterLayoutProps> = ({ filterComponent }) => {
   return (
-    <Box sx={{ display: 'flex', p: '0' }}>
-      <Box sx={{ maxWidth: '60%', p: 2 }}>
-        <Outlet />
-      </Box>
+    <Box sx={{ display: 'flex', p: '0', flexDirection: 'column' }}>
+      <SearchComponent />
 
-      <Box sx={{ maxwidth: '30%', p: 2 }}> {filterComponent}</Box>
-
-      {/* <Box sx={{ width: '10%' }} /> */}
+      {filterComponent}
+      <Outlet />
     </Box>
   );
 };

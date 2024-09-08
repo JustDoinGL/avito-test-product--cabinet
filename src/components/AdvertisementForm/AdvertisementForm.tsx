@@ -1,163 +1,73 @@
-import React from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { Box, Button, TextField, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { TAdvertisement } from 'types/Advertisement';
+import CustomTextField from 'ui/CustomTextField';
+import { LoadingButton } from '@mui/lab';
 
 const advertisementSchema = z.object({
-  id: z.string(),
-  name: z.string().min(1, 'Название обязательно'),
-  description: z.string().min(1, 'Описание обязательно'),
-  price: z.number().min(0, 'Цена должна быть положительной'),
-  createdAt: z.string(),
-  views: z.number().min(0),
-  likes: z.number().min(0),
+  name: z.string().min(1, 'Название обязательно').max(20, 'Название не должно превышать 20 символов'),
+  description: z.string().max(800, 'Описание не должно превышать 800 символов').optional(),
+  price: z.preprocess(
+    (value) => {
+      if (typeof value === 'string') {
+        const parsedValue = parseFloat(value);
+        if (isNaN(parsedValue)) {
+          return undefined;
+        }
+        return parsedValue;
+      }
+      return value;
+    },
+    z
+      .number({
+        required_error: 'Введите число',
+      })
+      .min(0, 'Цена должна быть положительной')
+      .max(100000000, 'Цена не должна превышать 100000000'),
+  ),
+
+  createdAt: z.string().optional(),
   imageUrl: z.string().url('Некорректный URL изображения').optional(),
 });
 
 type AdvertisementFormValues = z.infer<typeof advertisementSchema>;
 
-const Advertisement: React.FC = () => {
-  const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+interface AdvertisementFormProps {
+  defaultValues?: TAdvertisement;
+  closeModal: () => void;
+}
 
-  const defaultValues: AdvertisementFormValues = {
-    id: '1',
-    name: 'Стул старинный',
-    description: 'Очень красивый',
-    price: 2000,
-    createdAt: '2022-08-12T20:16:55.351Z',
-    views: 20,
-    likes: 2,
-    imageUrl: '',
-  };
-
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<AdvertisementFormValues>({
-    defaultValues,
+const AdvertisementForm: React.FC<AdvertisementFormProps> = ({ defaultValues, closeModal }) => {
+  const { control, handleSubmit, formState } = useForm<AdvertisementFormValues>({
     resolver: zodResolver(advertisementSchema),
+    mode: 'onChange',
   });
 
-  const onSubmit = (data: AdvertisementFormValues) => {
-    console.log('Сохраненные данные:', data);
-    // Здесь можно добавить логику для сохранения данных
+  const { isDirty, isValid, isSubmitting } = formState;
+
+  const onSubmit: SubmitHandler<AdvertisementFormValues> = async (data) => {
+    await new Promise((resolve) => setTimeout(resolve, 1500)).then(() => {
+      console.log(data);
+
+      closeModal();
+    });
   };
 
   return (
-    <Box
-      component='form'
-      onSubmit={handleSubmit(onSubmit)}
-      sx={{
-        maxWidth: isSmallScreen ? '100%' : '600px',
-        margin: 'auto',
-        padding: 3,
-        backgroundColor: '#f5f5f5',
-        borderRadius: 2,
-        boxShadow: 3,
-      }}
-    >
+    <Box component='form' onSubmit={handleSubmit(onSubmit)} sx={{ maxWidth: '90%', margin: '0 auto' }}>
       <Typography variant='h4' gutterBottom align='center'>
-        Редактирование объявления
+        {defaultValues?.id ? 'Редактирование объявления' : 'Создание объявления'}
       </Typography>
-      <Box>
-        <Box>
-          <Controller
-            name='name'
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                label='Название'
-                fullWidth
-                error={!!errors.name}
-                helperText={errors.name?.message}
-              />
-            )}
-          />
-        </Box>
-        <Box>
-          <Controller
-            name='description'
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                label='Описание'
-                fullWidth
-                multiline
-                rows={4}
-                error={!!errors.description}
-                helperText={errors.description?.message}
-              />
-            )}
-          />
-        </Box>
-        <Box>
-          <Controller
-            name='price'
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                label='Цена'
-                type='number'
-                fullWidth
-                error={!!errors.price}
-                helperText={errors.price?.message}
-              />
-            )}
-          />
-        </Box>
-        <Box>
-          <Controller
-            name='views'
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                label='Просмотры'
-                type='number'
-                fullWidth
-                error={!!errors.views}
-                helperText={errors.views?.message}
-              />
-            )}
-          />
-        </Box>
-        <Box>
-          <Controller
-            name='likes'
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                label='Лайки'
-                type='number'
-                fullWidth
-                error={!!errors.likes}
-                helperText={errors.likes?.message}
-              />
-            )}
-          />
-        </Box>
-        <Box>
-          <Controller
-            name='imageUrl'
-            control={control}
-            render={({ field }) => (
-              <TextField
-                {...field}
-                label='URL изображения'
-                fullWidth
-                error={!!errors.imageUrl}
-                helperText={errors.imageUrl?.message}
-              />
-            )}
-          />
-        </Box>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        <CustomTextField control={control} label='Название продукта' name='name' placeholder='Наименование' />
+
+        <CustomTextField control={control} label='Описание' name='description' placeholder='Description' />
+
+        <CustomTextField control={control} label='Введите цену' name='price' placeholder='Цена' type='number' />
+
+        <CustomTextField control={control} label='Введите url картинки' name='imageUrl' placeholder='URL' />
       </Box>
 
       <Box
@@ -167,10 +77,12 @@ const Advertisement: React.FC = () => {
           mt: 4,
         }}
       >
-        <Button
+        <LoadingButton
           type='submit'
           variant='contained'
           color='primary'
+          loading={isSubmitting}
+          disabled={!isDirty || !isValid}
           sx={{
             backgroundColor: '#1976d2',
             '&:hover': {
@@ -179,12 +91,11 @@ const Advertisement: React.FC = () => {
             padding: '10px 20px',
           }}
         >
-          Сохранить
-        </Button>
+          {defaultValues?.id ? 'Сохранить изменения' : 'Создать'}
+        </LoadingButton>
       </Box>
     </Box>
   );
 };
 
-export default Advertisement;
-
+export default AdvertisementForm;

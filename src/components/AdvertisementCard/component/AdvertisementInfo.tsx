@@ -1,6 +1,7 @@
 import { CardContent, CardMedia, Typography } from '@mui/material';
 import { TAdvertisement } from 'types/Advertisement';
-import { formatDate } from 'utils/helpers';
+import EllipsisText from 'ui/EllipsisText';
+import { formatDate, formatNumber } from 'utils/helpers';
 
 interface AdvertisementInfoProps {
   content: TAdvertisement;
@@ -18,9 +19,8 @@ const AdvertisementInfo: React.FC<AdvertisementInfoProps> = ({ content }) => {
         alt={imageUrl ? name : 'Not Found Img'}
       />
       <CardContent sx={{ textAlign: 'center' }}>
-        <Typography gutterBottom variant='h5' component='div'>
-          {name}
-        </Typography>
+        <EllipsisText sx={{ marginBottom: 2, textAlign: 'center', fontSize: '1rem', fontWeight: '700' }} text={name} />
+
         <Typography variant='body2' color='text.secondary'>
           {description}
         </Typography>
@@ -28,7 +28,7 @@ const AdvertisementInfo: React.FC<AdvertisementInfoProps> = ({ content }) => {
           {price} ₽
         </Typography>
         <Typography variant='body2' color='text.secondary'>
-          Просмотров: {views} | Лайков: {likes}
+          Просмотров: {formatNumber(views)} | Лайков: {formatNumber(likes)}
         </Typography>
         <Typography variant='body2' color='text.secondary'>
           Дата добавления: {formatDate(createdAt)}

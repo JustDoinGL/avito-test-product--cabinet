@@ -6,7 +6,7 @@ type InfoItemProps = {
 };
 
 const InfoItem: React.FC<InfoItemProps> = ({ icon, text }) => (
-  <Box display='flex' alignItems='center' gap='5px'>
+  <Box display='flex' alignItems='center' gap='5px' justifyContent='center'>
     {icon}
     <Typography variant='body1'>{text}</Typography>
   </Box>
