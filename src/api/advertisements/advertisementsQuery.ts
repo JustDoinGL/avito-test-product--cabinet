@@ -19,7 +19,7 @@ export const createAdvertisement = async (advertisement: TAdvertisement) => {
   return data;
 };
 
-export const fetchAdvertisementById = async (id: string, signal: AbortSignal): Promise<TAdvertisement> => {
+export const fetchAdvertisementById = async (id: string, signal?: AbortSignal): Promise<TAdvertisement> => {
   const response = await fetch(`${pathAdvertisements}/${id}`, { signal });
   if (!response.ok) {
     throw new Error('Network response was not ok');

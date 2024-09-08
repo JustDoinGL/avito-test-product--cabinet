@@ -40,7 +40,7 @@ const EllipsisText: React.FC<EllipsisTextProps> = ({ text, sx }) => {
   }, [maxWidth, text]);
 
   return (
-    <Box ref={containerRef} style={{ width: '100%' }}>
+    <Box ref={containerRef} sx={{ width: '100%', margin:'0 auto' }}>
       <CustomTooltip title={isOverflowed ? text : ''} placement='top-start'>
         <StyledText ref={textRef} maxWidth={maxWidth} sx={sx}>
           {text}
