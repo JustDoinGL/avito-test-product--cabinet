@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { TextField, Button, Box } from '@mui/material';
 import useDebounce from 'hooks/useDebounce';
 import { colors, sizes } from 'utils/styles';
@@ -14,19 +14,24 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ isMainPage }) => {
   const setFilters = useAdvertisementStore((store) => store.setFilters);
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
+  const isFirstRender = useRef(true);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
   useEffect(() => {
-    if (isMainPage) {
-      if (debouncedSearchTerm.length > 0) {
-        setFilters({ text: debouncedSearchTerm });
-      } else {
-        setFilters({ text: undefined });
-      }
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
     }
+
+    if (debouncedSearchTerm.length > 0) {
+      setFilters({ text: debouncedSearchTerm });
+    } else {
+      setFilters({ text: undefined });
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchTerm]);
 

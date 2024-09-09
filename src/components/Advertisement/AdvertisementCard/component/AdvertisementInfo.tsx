@@ -1,8 +1,10 @@
-import { CardContent, CardMedia, Typography } from '@mui/material';
+import { CardContent, CardMedia, Typography, Box, Chip, Divider } from '@mui/material';
 import { TAdvertisement } from 'types/Advertisement';
 import CustomDescription from 'ui/CustomDescription';
 import EllipsisText from 'ui/EllipsisText';
 import { formatDate, formatNumber } from 'utils/helpers';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 
 interface AdvertisementInfoProps {
   content: TAdvertisement;
@@ -12,16 +14,28 @@ const AdvertisementInfo: React.FC<AdvertisementInfoProps> = ({ content }) => {
   const { name, description, price, views, likes, createdAt, imageUrl } = content;
 
   return (
-    <>
+    <Box sx={{ border: '1px solid #e0e0e0', borderRadius: '8px', overflow: 'hidden', boxShadow: 2, padding: 2 }}>
       <CardMedia
         component='img'
         height='140'
         image={imageUrl || '/notFound.jpg'}
         alt={imageUrl ? name : 'Not Found Img'}
+        sx={{ objectFit: 'cover', borderRadius: '8px' }}
       />
       <CardContent sx={{ textAlign: 'center' }}>
-        <EllipsisText sx={{ marginBottom: 2, textAlign: 'center', fontSize: '1rem', fontWeight: '700' }} text={name} />
+        <Typography variant='h6' sx={{ fontWeight: 'bold', marginBottom: 1, color: '#333' }}>
+          Название:
+        </Typography>
+        <EllipsisText
+          sx={{ marginBottom: 2, textAlign: 'center', fontSize: '1.25rem', fontWeight: 'bold', color: '#1976d2' }}
+          text={name}
+        />
 
+        <Divider sx={{ marginY: 2 }} />
+
+        <Typography variant='h6' sx={{ fontWeight: 'bold', marginBottom: 1, color: '#333' }}>
+          Описание:
+        </Typography>
         {description ? (
           <CustomDescription description={description} maxRows={3} />
         ) : (
@@ -30,17 +44,33 @@ const AdvertisementInfo: React.FC<AdvertisementInfoProps> = ({ content }) => {
           </Typography>
         )}
 
-        <Typography variant='h6' color='info' sx={{ marginTop: '10px' }}>
-          {price} ₽
+        <Typography variant='h6' color='primary' sx={{ marginTop: '10px', fontWeight: 'bold' }}>
+          {formatNumber(price)} ₽
         </Typography>
-        <Typography variant='body2' color='text.secondary'>
-          Просмотров: {formatNumber(views)} | Лайков: {formatNumber(likes)}
-        </Typography>
-        <Typography variant='body2' color='text.secondary'>
+
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 1 }}>
+          <Chip
+            icon={<VisibilityIcon />}
+            label={`Просмотров: ${formatNumber(views)}`}
+            variant='outlined'
+            color='info'
+            size='small'
+            sx={{ marginRight: 1 }}
+          />
+          <Chip
+            icon={<FavoriteIcon />}
+            label={`Лайков: ${formatNumber(likes)}`}
+            variant='outlined'
+            color='error'
+            size='small'
+          />
+        </Box>
+
+        <Typography variant='body2' color='text.secondary' sx={{ marginTop: 1 }}>
           Дата добавления: {formatDate(createdAt)}
         </Typography>
       </CardContent>
-    </>
+    </Box>
   );
 };
 

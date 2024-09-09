@@ -1,5 +1,5 @@
-import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
+import styled from '@emotion/styled';
+import { Box } from '@mui/material';
 
 const LoaderContainer = styled(Box)({
   display: 'flex',

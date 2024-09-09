@@ -3,7 +3,8 @@ import { Card } from '@mui/material';
 import { TAdvertisement } from 'types/Advertisement';
 import { Link } from 'react-router-dom';
 import { RoutePaths } from 'utils/routes/routes';
-import { AdvertisementInfo, MenuButton } from './component';
+import AdvertisementInfo from './component/AdvertisementInfo';
+import MenuButton from 'components/MenuComponent/MenuButton';
 
 interface AdvertisementCardProps {
   content: TAdvertisement;

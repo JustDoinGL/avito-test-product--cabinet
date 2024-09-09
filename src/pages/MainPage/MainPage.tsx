@@ -6,10 +6,20 @@ import { CustomLoader, CustomModal } from 'ui/index';
 import AdvertisementCard from 'components/Advertisement/AdvertisementCard/AdvertisementCard';
 import { Typography } from '@mui/material';
 import { colors } from 'utils/styles';
+import { useEffect } from 'react';
 
 const MainPage = () => {
-  const { advertisements, loadMoreAdvertisements, hasMore, loading } = useAdvertisementStore();
+  const { content, loadMoreItems, hasMore, loading, fetchItems, resetStore } = useAdvertisementStore();
   const { isOpen, setOpen, id, setId, setAdvertisementData } = useGlobalStore((store) => store);
+
+  useEffect(() => {
+    fetchItems({ start: 0, limit: 10 });
+
+    return () => {
+      resetStore();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleCloseModal = () => {
     setAdvertisementData(null);
@@ -22,8 +32,8 @@ const MainPage = () => {
       <InfiniteScroll
         style={{ overflowY: 'scroll' }}
         height={'80vh'}
-        dataLength={advertisements.length}
-        next={loadMoreAdvertisements}
+        dataLength={content.length}
+        next={loadMoreItems}
         hasMore={hasMore}
         loader={loading ? <CustomLoader /> : null}
         endMessage={
@@ -32,7 +42,7 @@ const MainPage = () => {
           </Typography>
         }
       >
-        {advertisements.map((item) => (
+        {content.map((item) => (
           <AdvertisementCard content={item} key={item.id} isAdvertisementMenu />
         ))}
       </InfiniteScroll>

@@ -41,7 +41,7 @@ const MenuButton: React.FC<MenuButtonProps> = ({ id }) => {
       handleClose();
       update(id);
     } else {
-      toast('Ошибка при удалении задачи.');
+      toast('Ошибка при удалении объявление.');
     }
   };
 
@@ -55,7 +55,8 @@ const MenuButton: React.FC<MenuButtonProps> = ({ id }) => {
           right: 8,
           zIndex: 2,
           color: colors.textSecondary,
-          '&:hover': { color: colors.primary },
+          background: colors.primary,
+          '&:hover': { color: colors.primary, background: colors.textSecondary },
         }}
         onClick={handleClick}
       >
