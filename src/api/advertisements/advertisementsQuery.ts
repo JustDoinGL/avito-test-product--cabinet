@@ -1,5 +1,5 @@
 import { pathAdvertisements } from 'api/const';
-import { TAdvertisement } from 'types/Advertisement';
+import { TAdvertisement, TAdvertisementUpdate } from 'types/Advertisement';
 
 export const fetchAdvertisements = async (
   queryStringResult: string,
@@ -13,7 +13,6 @@ export const fetchAdvertisements = async (
   return data;
 };
 
-// Create Advertisement
 export const createAdvertisement = async (
   advertisement: TAdvertisement,
   options?: { signal?: AbortSignal },
@@ -35,7 +34,6 @@ export const createAdvertisement = async (
   return data;
 };
 
-// Fetch Advertisement by ID
 export const fetchAdvertisementById = async (
   id: string,
   options?: { signal?: AbortSignal },
@@ -48,13 +46,12 @@ export const fetchAdvertisementById = async (
   return data;
 };
 
-// Update Advertisement
 export const updateAdvertisement = async (
-  advertisement: TAdvertisement,
+  advertisement: TAdvertisementUpdate,
   options?: { signal?: AbortSignal },
-): Promise<TAdvertisement> => {
+) => {
   const response = await fetch(`${pathAdvertisements}/${advertisement.id}`, {
-    method: 'PUT',
+    method: 'PATCH',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
     },
@@ -70,7 +67,6 @@ export const updateAdvertisement = async (
   return data;
 };
 
-// Delete Advertisement
 export const deleteAdvertisement = async (id: string, options?: { signal?: AbortSignal }): Promise<boolean> => {
   const response = await fetch(`${pathAdvertisements}/${id}`, {
     method: 'DELETE',

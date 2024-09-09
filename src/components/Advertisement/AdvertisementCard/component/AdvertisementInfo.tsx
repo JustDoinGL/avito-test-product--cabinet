@@ -1,5 +1,6 @@
 import { CardContent, CardMedia, Typography } from '@mui/material';
 import { TAdvertisement } from 'types/Advertisement';
+import CustomDescription from 'ui/CustomDescription';
 import EllipsisText from 'ui/EllipsisText';
 import { formatDate, formatNumber } from 'utils/helpers';
 
@@ -21,9 +22,14 @@ const AdvertisementInfo: React.FC<AdvertisementInfoProps> = ({ content }) => {
       <CardContent sx={{ textAlign: 'center' }}>
         <EllipsisText sx={{ marginBottom: 2, textAlign: 'center', fontSize: '1rem', fontWeight: '700' }} text={name} />
 
-        <Typography variant='body2' color='text.secondary'>
-          {description}
-        </Typography>
+        {description ? (
+          <CustomDescription description={description} maxRows={3} />
+        ) : (
+          <Typography variant='body2' color='text.secondary'>
+            Описание отсутствует
+          </Typography>
+        )}
+
         <Typography variant='h6' color='info' sx={{ marginTop: '10px' }}>
           {price} ₽
         </Typography>

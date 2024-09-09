@@ -1,7 +1,10 @@
 import { TAdvertisement } from 'types/Advertisement';
 import { create } from 'zustand';
 import queryString from 'query-string';
-import { fetchAdvertisements as apiFetchAdvertisements } from 'api/advertisements/advertisementsQuery';
+import {
+  fetchAdvertisements as apiFetchAdvertisements,
+  fetchAdvertisementById,
+} from 'api/advertisements/advertisementsQuery';
 
 type Filters = {
   likes?: number;
@@ -18,6 +21,7 @@ type AdvertisementStore = {
   filters: Filters;
   currentPage: number;
   hasMore: boolean;
+  update: (id: string) => void;
 
   fetchAdvertisements: (params: {
     start: number;
@@ -77,6 +81,31 @@ export const useAdvertisementStore = create<AdvertisementStore>((set, get) => ({
       }
     } catch (error) {
       set({ loading: false, error: error instanceof Error ? error.message : 'Unknown error' });
+    }
+  },
+
+  update: async (id: string) => {
+    try {
+      const data = await fetchAdvertisementById(id);
+      if (data) {
+        set((state) => {
+          const updatedAdvertisements = state.advertisements.map((ad) => (ad.id === id ? data : ad));
+          return { advertisements: updatedAdvertisements };
+        });
+      } else {
+        set((state) => {
+          const filteredAdvertisements = state.advertisements.filter((ad) => ad.id !== id);
+          return { advertisements: filteredAdvertisements };
+        });
+      }
+    } catch (error) {
+      set((state) => {
+        const filteredAdvertisements = state.advertisements.filter((ad) => ad.id !== id);
+        return {
+          advertisements: filteredAdvertisements,
+          error: error instanceof Error ? error.message : 'Unknown error',
+        };
+      });
     }
   },
 

@@ -123,7 +123,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product, handleGoBack }
         <InfoItem icon={<AlarmOnIcon />} text={`Дата создания: ${formatDate(product.createdAt)}`} />
       </Box>
 
-      {product.description && <CustomDescription description={product.description} />}
+      {product.description && <CustomDescription description={product.description} maxRows={3} />}
 
       <Box
         sx={{
@@ -149,7 +149,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product, handleGoBack }
       </Box>
 
       <CustomModal open={isModalOpen} onClose={handleCloseModal}>
-        <AdvertisementForm values={modalMode === 'edit' ? product : undefined} closeModal={handleCloseModal} />
+        <AdvertisementForm id={modalMode === 'edit' ? product.id : undefined} closeModal={handleCloseModal} />
       </CustomModal>
     </Box>
   );

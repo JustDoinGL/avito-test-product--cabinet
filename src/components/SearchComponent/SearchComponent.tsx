@@ -3,7 +3,7 @@ import { TextField, Button, Box } from '@mui/material';
 import useDebounce from 'hooks/useDebounce';
 import { colors, sizes } from 'utils/styles';
 import useGlobalStore from 'store/useStore';
-import { useAdvertisementStore } from 'pages/MainPage/useFilterStore';
+import { useAdvertisementStore } from 'store/useFilterStore';
 
 type SearchComponentProps = {
   isMainPage: boolean;
@@ -46,7 +46,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ isMainPage }) => {
           color='primary'
           onClick={() => setOpen(true)}
           sx={{
-            maxWidth: '100px',
+            maxWidth: '150px',
             bgcolor: colors.success,
             [`@media (max-width: ${sizes.tablet})`]: { display: 'none' },
           }}

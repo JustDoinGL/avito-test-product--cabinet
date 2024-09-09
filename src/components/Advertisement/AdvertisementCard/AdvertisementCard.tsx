@@ -3,26 +3,15 @@ import { Card } from '@mui/material';
 import { TAdvertisement } from 'types/Advertisement';
 import { Link } from 'react-router-dom';
 import { RoutePaths } from 'utils/routes/routes';
-import { AdvertisementInfo, AdvertisementMenu, MenuButton } from './component';
+import { AdvertisementInfo, MenuButton } from './component';
 
 interface AdvertisementCardProps {
   content: TAdvertisement;
+  isAdvertisementMenu?: boolean;
 }
 
-const AdvertisementCard: React.FC<AdvertisementCardProps> = ({ content }) => {
+const AdvertisementCard: React.FC<AdvertisementCardProps> = ({ content, isAdvertisementMenu }) => {
   const { id } = content;
-
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    event.stopPropagation();
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   return (
     <Card
@@ -42,8 +31,8 @@ const AdvertisementCard: React.FC<AdvertisementCardProps> = ({ content }) => {
       <Link to={RoutePaths.Advertisement(id)} style={{ textDecoration: 'none', color: 'inherit' }}>
         <AdvertisementInfo content={content} />
       </Link>
-      <MenuButton onClick={handleClick} />
-      <AdvertisementMenu anchorEl={anchorEl} open={open} onClose={handleClose} />
+
+      {isAdvertisementMenu && <MenuButton id={id} />}
     </Card>
   );
 };

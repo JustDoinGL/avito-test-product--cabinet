@@ -4,7 +4,7 @@ import { Box, Button, Typography } from '@mui/material';
 import CustomTextField from 'ui/CustomTextField';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FilterForm, filterSchema } from './FilterComponent.type';
-import { useAdvertisementStore } from 'pages/MainPage/useFilterStore';
+import { useAdvertisementStore } from 'store/useFilterStore';
 import useDebounce from 'hooks/useDebounce';
 
 const FilterComponent: React.FC = () => {

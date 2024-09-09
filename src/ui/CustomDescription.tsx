@@ -1,7 +1,10 @@
 import { Box, Button, Typography } from '@mui/material';
 import { useState, useEffect, useRef } from 'react';
 
-const CustomDescription: React.FC<{ description: string; maxRows?: number }> = ({ description, maxRows = 3 }) => {
+const CustomDescription: React.FC<{ description: string; maxRows?: number; maxChars?: number }> = ({
+  description,
+  maxRows = 3,
+}) => {
   const [expanded, setExpanded] = useState(false);
   const [showButton, setShowButton] = useState(false);
   const descriptionRef = useRef<HTMLDivElement | null>(null);
@@ -10,27 +13,35 @@ const CustomDescription: React.FC<{ description: string; maxRows?: number }> = (
     if (descriptionRef.current) {
       const lineHeight = parseFloat(getComputedStyle(descriptionRef.current).lineHeight);
       const maxHeight = lineHeight * maxRows;
-      setShowButton(descriptionRef.current.scrollHeight > maxHeight);
-    }
-  }, [description, maxRows]);
 
-  const toggleExpanded = () => {
+      const isOverflowing = descriptionRef.current.scrollHeight > maxHeight;
+      const isLongText = description.length > 100;
+
+      setShowButton(isOverflowing || isLongText);
+    }
+  }, [description, maxRows, expanded]);
+
+  const toggleExpanded = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
     setExpanded(!expanded);
   };
 
   return (
-    <Box mb='30px'>
+    <Box mb='30px' textAlign='center'>
       <Typography
         ref={descriptionRef}
         variant='body1'
         color='text.secondary'
         sx={{
           mb: 1,
-          display: '-webkit-box',
-          WebkitBoxOrient: 'vertical',
+          display: 'block',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
-          WebkitLineClamp: expanded ? 'none' : maxRows,
+          maxHeight: expanded ? 'none' : `${maxRows * 1.5}em`,
+          lineHeight: '1.5em',
+          whiteSpace: expanded ? 'normal' : 'nowrap',
+          wordWrap: 'break-word',
+          overflowWrap: 'break-word',
         }}
       >
         {description}

@@ -5,9 +5,10 @@ import { Outlet, useLocation } from 'react-router-dom';
 
 const FilterLayout: React.FC = () => {
   const location = useLocation();
+
   return (
     <Box sx={{ display: 'flex', p: '1', flexDirection: 'column' }}>
-      <SearchComponent isMainPage={location.pathname === '/'}  />
+      <SearchComponent isMainPage={location.pathname === '/'} />
       <Box sx={{ display: 'flex', mt: '30px', justifyContent: 'space-around' }}>
         <Box>
           <Outlet />
