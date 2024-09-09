@@ -4,9 +4,9 @@ import { colors } from 'utils/styles';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { deleteAdvertisement } from 'api/advertisements/advertisementsQuery';
-import useGlobalStore from 'store/useStore';
-import { useAdvertisementStore } from 'store/useFilterStore';
 import useApi from 'hooks/useApi';
+import { useAdvertisementFilterStore } from 'store/useFilterStore';
+import useModalStore from 'store/useModalStore';
 
 interface MenuButtonProps {
   id: string;
@@ -15,8 +15,8 @@ interface MenuButtonProps {
 const MenuButton: React.FC<MenuButtonProps> = ({ id }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const { setOpen, setId } = useGlobalStore((store) => store);
-  const update = useAdvertisementStore((store) => store.update);
+  const setOpen = useModalStore((store) => store.setOpen);
+  const { update, setId } = useAdvertisementFilterStore((store) => store);
   const { execute } = useApi<string, boolean>();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {

@@ -26,6 +26,8 @@ type Store<T extends WithId> = {
   hasMore: boolean;
   update: (id: string) => Promise<void>;
   resetStore: () => void;
+  id: string | null;
+  setId: (id: string | null) => void;
 
   fetchItems: (params: {
     start: number;
@@ -57,6 +59,9 @@ export const createStore = <T extends WithId>(
     },
     currentPage: 0,
     hasMore: true,
+    id: null,
+
+    setId: (id: string | null) => set({ id }),
 
     fetchItems: async (params) => {
       set({ loading: true, error: null });
@@ -177,12 +182,12 @@ export const createStore = <T extends WithId>(
   }));
 };
 
-export const useAdvertisementStore = createStore<TAdvertisement>(
+export const useAdvertisementFilterStore = createStore<TAdvertisement>(
   (query) => fetchAdvertisements(query),
   (id) => fetchAdvertisementById(id),
 );
 
-export const useOrderStore = createStore<TOrder>(
+export const useOrderFilterStore = createStore<TOrder>(
   (query) => fetchOrders(query),
   (id) => fetchOrderById(id),
 );

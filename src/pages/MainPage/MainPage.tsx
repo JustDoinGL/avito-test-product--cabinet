@@ -1,16 +1,15 @@
 import AdvertisementForm from 'components/Advertisement/AdvertisementForm/AdvertisementForm';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import useGlobalStore from 'store/useStore';
-import { useAdvertisementStore } from '../../store/useFilterStore';
 import { CustomLoader, CustomModal } from 'ui/index';
 import AdvertisementCard from 'components/Advertisement/AdvertisementCard/AdvertisementCard';
 import { Typography } from '@mui/material';
 import { colors } from 'utils/styles';
 import { useEffect } from 'react';
+import { useModalStore, useAdvertisementFilterStore } from 'store/index';
 
 const MainPage = () => {
-  const { content, loadMoreItems, hasMore, loading, fetchItems, resetStore } = useAdvertisementStore();
-  const { isOpen, setOpen, id, setId, setAdvertisementData } = useGlobalStore((store) => store);
+  const { content, loadMoreItems, hasMore, loading, fetchItems, resetStore, setId, id } = useAdvertisementFilterStore();
+  const { isOpen, setOpen } = useModalStore((store) => store);
 
   useEffect(() => {
     fetchItems({ start: 0, limit: 10 });
@@ -22,7 +21,6 @@ const MainPage = () => {
   }, []);
 
   const handleCloseModal = () => {
-    setAdvertisementData(null);
     setOpen(false);
     setId(null);
   };

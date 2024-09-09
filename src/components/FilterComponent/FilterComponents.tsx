@@ -4,8 +4,8 @@ import { Box, Button, Typography } from '@mui/material';
 import CustomTextField from 'ui/CustomTextField';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FilterForm, filterSchema } from './FilterComponent.type';
-import { useAdvertisementStore } from 'store/useFilterStore';
 import useDebounce from 'hooks/useDebounce';
+import { useAdvertisementFilterStore } from 'store/index';
 
 const FilterComponent: React.FC = () => {
   const isFirstRender = useRef(true);
@@ -25,7 +25,7 @@ const FilterComponent: React.FC = () => {
   });
 
   const formData = watch();
-  const setFilters = useAdvertisementStore((state) => state.setFilters);
+  const setFilters = useAdvertisementFilterStore((state) => state.setFilters);
 
   const debouncedLikes = useDebounce(formData.likes);
   const debouncedViews = useDebounce(formData.views);

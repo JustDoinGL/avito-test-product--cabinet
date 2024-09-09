@@ -6,14 +6,12 @@ import ProductDetails from './components/ProductCard';
 import useApi from 'hooks/useApi';
 import { useEffect, useState } from 'react';
 import { TAdvertisement } from 'types/Advertisement';
-import useGlobalStore from 'store/useStore';
 import { CustomLoader } from 'ui/index';
 
 const AdvertisementPage: React.FC = () => {
-  const advertisementData = useGlobalStore((store) => store.advertisementData);
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [data, setData] = useState<TAdvertisement | null>(advertisementData);
+  const [data, setData] = useState<TAdvertisement | null>();
   const { execute, isLoading, error } = useApi<string, TAdvertisement>();
 
   const handleGoBack = () => {
@@ -26,21 +24,16 @@ const AdvertisementPage: React.FC = () => {
 
   const fetchData = async (id: string) => {
     const advertisement = await execute(fetchAdvertisementById, id);
-    if (advertisement) {
-      setData(advertisement);
-    }
+
+    setData(advertisement);
   };
 
   useEffect(() => {
     if (id) {
-      if (advertisementData) {
-        setData(advertisementData);
-      } else {
-        fetchData(id);
-      }
+      fetchData(id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, advertisementData]);
+  }, [id]);
 
   if (!id || error) {
     return (

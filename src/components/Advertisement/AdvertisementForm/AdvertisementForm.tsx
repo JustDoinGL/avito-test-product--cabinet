@@ -16,9 +16,8 @@ import { colors } from 'utils/styles';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import { RoutePaths } from 'utils/routes/routes';
-import useGlobalStore from 'store/useStore';
 import { useEffect } from 'react';
-import { useAdvertisementStore } from 'store/useFilterStore';
+import { useAdvertisementFilterStore } from 'store/index';
 
 interface AdvertisementFormProps {
   closeModal: () => void;
@@ -27,10 +26,9 @@ interface AdvertisementFormProps {
 }
 
 const AdvertisementForm: React.FC<AdvertisementFormProps> = ({ closeModal, isNavigate, id }) => {
-  const update = useAdvertisementStore((store) => store.update);
+  const update = useAdvertisementFilterStore((store) => store.update);
   const { execute: fetchAdvertisement } = useApi<string, TAdvertisement>();
   const { execute: saveAdvertisement } = useApi<TAdvertisement, TAdvertisementUpdate | TAdvertisement>();
-  const setAdvertisementData = useGlobalStore((store) => store.setAdvertisementData);
   const { control, handleSubmit, formState, setError, reset } = useForm<AdvertisementFormValues>({
     resolver: zodResolver(advertisementSchema),
     mode: 'onChange',
@@ -87,8 +85,6 @@ const AdvertisementForm: React.FC<AdvertisementFormProps> = ({ closeModal, isNav
         closeModal();
 
         if (isNavigate) navigate(RoutePaths.Advertisement(advertisementId));
-
-        setAdvertisementData(advertisement);
       }
     });
   };

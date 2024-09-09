@@ -1,13 +1,13 @@
 import { Typography } from '@mui/material';
 import { useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { useOrderStore } from 'store/useFilterStore';
 import CustomLoader from 'ui/CustomLoader';
 import { colors } from 'utils/styles';
 import OrderCard from './components/OrderCard';
+import { useOrderFilterStore } from 'store/index';
 
 const OrderPage = () => {
-  const { content, loadMoreItems, hasMore, loading, fetchItems, resetStore } = useOrderStore();
+  const { content, loadMoreItems, hasMore, loading, fetchItems, resetStore } = useOrderFilterStore();
 
   useEffect(() => {
     fetchItems({ start: 0, limit: 10 });

@@ -2,16 +2,15 @@ import React, { useEffect, useRef, useState } from 'react';
 import { TextField, Button, Box } from '@mui/material';
 import useDebounce from 'hooks/useDebounce';
 import { colors, sizes } from 'utils/styles';
-import useGlobalStore from 'store/useStore';
-import { useAdvertisementStore } from 'store/useFilterStore';
+import { useAdvertisementFilterStore, useModalStore } from 'store/index';
 
 type SearchComponentProps = {
   isMainPage: boolean;
 };
 
 const SearchComponent: React.FC<SearchComponentProps> = ({ isMainPage }) => {
-  const setOpen = useGlobalStore((store) => store.setOpen);
-  const setFilters = useAdvertisementStore((store) => store.setFilters);
+  const setOpen = useModalStore((store) => store.setOpen);
+  const setFilters = useAdvertisementFilterStore((store) => store.setFilters);
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
   const isFirstRender = useRef(true);
