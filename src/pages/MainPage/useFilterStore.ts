@@ -8,6 +8,7 @@ type Filters = {
   views?: number;
   price?: number;
   limit?: number;
+  text?: string;
 };
 
 type AdvertisementStore = {
@@ -24,6 +25,7 @@ type AdvertisementStore = {
     likes?: number;
     views?: number;
     price?: number;
+    text?: string;
   }) => Promise<void>;
 
   loadMoreAdvertisements: () => Promise<void>;
@@ -39,6 +41,7 @@ export const useAdvertisementStore = create<AdvertisementStore>((set, get) => ({
     views: undefined,
     price: undefined,
     limit: 10,
+    text: undefined,
   },
   currentPage: 0,
   totalAdvertisements: 0,
@@ -46,13 +49,16 @@ export const useAdvertisementStore = create<AdvertisementStore>((set, get) => ({
 
   fetchAdvertisements: async (params) => {
     set({ loading: true, error: null });
-    const { start, limit, likes, views, price } = params;
+    const { start, limit, likes, views, price, text } = params;
 
-    const queryParams: Record<string, number> = {
+    const queryParams: Record<string, number | string> = {
       _start: start,
       _limit: limit,
     };
 
+    if (text !== undefined && text.length > 0) {
+      queryParams.name = text;
+    }
     if (likes !== undefined && likes > 0) queryParams.likes_gt = likes;
     if (views !== undefined && views > 0) queryParams.views_gt = views;
     if (price !== undefined && price > 0) queryParams.price_gt = price;
@@ -91,6 +97,7 @@ export const useAdvertisementStore = create<AdvertisementStore>((set, get) => ({
         likes: filters.likes,
         views: filters.views,
         price: filters.price,
+        text: filters.text,
       });
     } catch (error) {
       set({ error: error instanceof Error ? error.message : 'Unknown error', loading: false });
@@ -109,6 +116,7 @@ export const useAdvertisementStore = create<AdvertisementStore>((set, get) => ({
         likes: newFilters.likes,
         views: newFilters.views,
         price: newFilters.price,
+        text: newFilters.text,
       });
       return { filters: newFilters };
     });

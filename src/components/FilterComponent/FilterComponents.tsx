@@ -50,7 +50,7 @@ const FilterComponent: React.FC = () => {
   }, [debouncedLikes, debouncedLimit, debouncedPrice, debouncedViews, setFilters]);
 
   const handleResetFilters = () => {
-    setFilters({ likes: undefined, views: undefined, price: undefined, limit: 10 });
+    setFilters({ likes: undefined, views: undefined, price: undefined, limit: 10, });
   };
 
   return (

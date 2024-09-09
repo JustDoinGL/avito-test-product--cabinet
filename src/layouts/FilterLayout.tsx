@@ -7,7 +7,7 @@ const FilterLayout: React.FC = () => {
   const location = useLocation();
   return (
     <Box sx={{ display: 'flex', p: '1', flexDirection: 'column' }}>
-      <SearchComponent isButton={location.pathname === '/'} />
+      <SearchComponent isMainPage={location.pathname === '/'}  />
       <Box sx={{ display: 'flex', mt: '30px', justifyContent: 'space-around' }}>
         <Box>
           <Outlet />
