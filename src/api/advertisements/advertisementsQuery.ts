@@ -1,19 +1,23 @@
 import { pathAdvertisements } from 'api/const';
 import { TAdvertisement } from 'types/Advertisement';
 
-// // Fetch Advertisements
-// export const fetchAdvertisements = async (data: { start: number, limit: number }, options?: { signal?: AbortSignal }): Promise<TAdvertisement[]> => {
-//   const { start, limit } = data;
-//   const response = await fetch(`${pathAdvertisements}?_start=${start}&_limit=${limit}`, { signal: options?.signal });
-//   if (!response.ok) {
-//     throw new Error('Network response was not ok');
-//   }
-//   const data = await response.json();
-//   return data;
-// };
+export const fetchAdvertisements = async (
+  queryStringResult: string,
+  options?: { signal?: AbortSignal },
+): Promise<TAdvertisement[]> => {
+  const response = await fetch(`${pathAdvertisements}?${queryStringResult}`, { signal: options?.signal });
+  if (!response.ok) {
+    throw new Error('Network response was not ok');
+  }
+  const data = await response.json();
+  return data;
+};
 
 // Create Advertisement
-export const createAdvertisement = async (advertisement: TAdvertisement, options?: { signal?: AbortSignal }): Promise<TAdvertisement> => {
+export const createAdvertisement = async (
+  advertisement: TAdvertisement,
+  options?: { signal?: AbortSignal },
+): Promise<TAdvertisement> => {
   const response = await fetch(`${pathAdvertisements}`, {
     method: 'POST',
     headers: {
@@ -32,7 +36,10 @@ export const createAdvertisement = async (advertisement: TAdvertisement, options
 };
 
 // Fetch Advertisement by ID
-export const fetchAdvertisementById = async (id: string, options?: { signal?: AbortSignal }): Promise<TAdvertisement> => {
+export const fetchAdvertisementById = async (
+  id: string,
+  options?: { signal?: AbortSignal },
+): Promise<TAdvertisement> => {
   const response = await fetch(`${pathAdvertisements}/${id}`, { signal: options?.signal });
   if (!response.ok) {
     throw new Error('Network response was not ok');
@@ -42,7 +49,10 @@ export const fetchAdvertisementById = async (id: string, options?: { signal?: Ab
 };
 
 // Update Advertisement
-export const updateAdvertisement = async (advertisement: TAdvertisement, options?: { signal?: AbortSignal }): Promise<TAdvertisement> => {
+export const updateAdvertisement = async (
+  advertisement: TAdvertisement,
+  options?: { signal?: AbortSignal },
+): Promise<TAdvertisement> => {
   const response = await fetch(`${pathAdvertisements}/${advertisement.id}`, {
     method: 'PUT',
     headers: {

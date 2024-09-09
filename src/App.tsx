@@ -7,7 +7,7 @@ function App() {
   return (
     <Routes>
       <Route path={RoutePaths.AllAdvertisements} element={<MainLayout />}>
-        <Route path={RoutePaths.AllAdvertisements} element={<FilterLayout filterComponent={<>dddd</>} />}>
+        <Route path={RoutePaths.AllAdvertisements} element={<FilterLayout />}>
           <Route index element={<MainPage />} />
           <Route path={RoutePaths.Orders} element={<OrdersPage />} />
         </Route>
