@@ -7,6 +7,7 @@ import useApi from 'hooks/useApi';
 import { useEffect, useState } from 'react';
 import { TAdvertisement } from 'types/Advertisement';
 import useGlobalStore from 'store/useStore';
+import { CustomLoader } from 'ui/index';
 
 const AdvertisementPage: React.FC = () => {
   const advertisementData = useGlobalStore((store) => store.advertisementData);
@@ -55,13 +56,7 @@ const AdvertisementPage: React.FC = () => {
   }
 
   return (
-    <Box>
-      {data ? (
-        <ProductDetails handleGoBack={handleGoBack} product={data} />
-      ) : (
-        isLoading && <Typography>Загрузка...</Typography>
-      )}
-    </Box>
+    <Box>{data ? <ProductDetails handleGoBack={handleGoBack} product={data} /> : isLoading && <CustomLoader />}</Box>
   );
 };
 

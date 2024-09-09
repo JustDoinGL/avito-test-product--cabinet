@@ -3,24 +3,31 @@ import { TextField, Button, Box } from '@mui/material';
 import useDebounce from 'hooks/useDebounce';
 import { colors, sizes } from 'utils/styles';
 import useGlobalStore from 'store/useStore';
+import { useAdvertisementStore } from 'pages/MainPage/useFilterStore';
 
 type SearchComponentProps = {
-  isButton: boolean;
+  isMainPage: boolean;
 };
 
-const SearchComponent: React.FC<SearchComponentProps> = ({ isButton }) => {
+const SearchComponent: React.FC<SearchComponentProps> = ({ isMainPage }) => {
   const setOpen = useGlobalStore((store) => store.setOpen);
+  const setFilters = useAdvertisementStore((store) => store.setFilters);
   const [searchTerm, setSearchTerm] = useState('');
-  const debouncedSearchTerm = useDebounce(searchTerm);
+  const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
   useEffect(() => {
-    if (debouncedSearchTerm) {
-      console.log('Debounced Search Term:', debouncedSearchTerm);
+    if (isMainPage) {
+      if (debouncedSearchTerm.length > 0) {
+        setFilters({ text: debouncedSearchTerm });
+      } else {
+        setFilters({ text: undefined });
+      }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchTerm]);
 
   return (
@@ -33,7 +40,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ isButton }) => {
         fullWidth
         sx={{ maxWidth: '300px', borderRadius: '20px' }}
       />
-      {isButton && (
+      {isMainPage && (
         <Button
           variant='contained'
           color='primary'

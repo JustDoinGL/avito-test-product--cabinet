@@ -19,7 +19,7 @@ export const advertisementSchema = z.object({
         required_error: 'Введите число',
       })
       .min(0, 'Цена должна быть положительной')
-      .max(100000000, 'Цена не должна превышать 100000000'),
+      .max(100000000, 'Цена не должна превышать 100 000 000'),
   ),
   imageUrl: z.string().url('Некорректный URL изображения').or(z.literal('')).optional(),
 });
