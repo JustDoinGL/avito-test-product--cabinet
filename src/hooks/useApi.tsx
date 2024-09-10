@@ -1,4 +1,5 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { AbortControllerManager } from 'utils/helpers/AbortControllerManager'; // Импортируем класс
 
 type UseApiResult<T, R> = {
   execute: (apiFunction: (data: T, options?: { signal?: AbortSignal }) => Promise<R>, data: T) => Promise<R | null>;
@@ -9,11 +10,11 @@ type UseApiResult<T, R> = {
 const useApi = <T, R>(): UseApiResult<T, R> => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const abortControllerManager = new AbortControllerManager();
 
   const execute = useCallback(
     async (apiFunction: (data: T, options?: { signal?: AbortSignal }) => Promise<R>, data: T): Promise<R | null> => {
-      const controller = new AbortController();
-      const signal = controller.signal;
+      const signal = abortControllerManager.createController();
 
       setIsLoading(true);
       setError(null);
@@ -43,8 +44,16 @@ const useApi = <T, R>(): UseApiResult<T, R> => {
       setIsLoading(false);
       return null;
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
+
+  useEffect(() => {
+    return () => {
+      abortControllerManager.abort();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return { execute, isLoading, error };
 };

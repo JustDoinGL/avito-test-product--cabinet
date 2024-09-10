@@ -4,6 +4,7 @@ import { TAdvertisement } from 'types/Advertisement';
 import { TOrder } from 'types/Order';
 import { fetchAdvertisementById, fetchAdvertisements } from 'api/advertisements/advertisementsQuery';
 import { fetchOrderById, fetchOrders } from 'api/orders/ordersQuery';
+import { AbortControllerManager } from 'utils/helpers/AbortControllerManager';
 
 type Filters = {
   likes?: number;
@@ -43,9 +44,11 @@ type Store<T extends WithId> = {
 };
 
 export const createStore = <T extends WithId>(
-  fetchItemsApi: (query: string) => Promise<T[]>,
-  fetchItemByIdApi: (id: string) => Promise<T>,
+  fetchItemsApi: (query: string, options?: { signal?: AbortSignal }) => Promise<T[]>,
+  fetchItemByIdApi: (id: string, options?: { signal?: AbortSignal }) => Promise<T>,
 ) => {
+  const abortControllerManager = new AbortControllerManager();
+
   return create<Store<T>>((set, get) => ({
     content: [],
     loading: false,
@@ -80,9 +83,10 @@ export const createStore = <T extends WithId>(
       if (price !== undefined && price > 0) queryParams.price_gt = price;
 
       const queryStringResult = queryString.stringify(queryParams);
+      const signal = abortControllerManager.createController();
 
       try {
-        const data = await fetchItemsApi(queryStringResult);
+        const data = await fetchItemsApi(queryStringResult, { signal });
         if (data.length === 0) {
           set({ hasMore: false });
         } else {
@@ -91,14 +95,24 @@ export const createStore = <T extends WithId>(
             loading: false,
           }));
         }
-      } catch (error) {
-        set({ loading: false, error: error instanceof Error ? error.message : 'Unknown error' });
+      } catch (error: unknown) {
+        if (error instanceof Error) {
+          if (error.name === 'AbortError') {
+            console.log('Fetch aborted');
+          } else {
+            set({ loading: false, error: error.message });
+          }
+        } else {
+          set({ loading: false, error: 'Unknown error' });
+        }
       }
     },
 
     update: async (id: string) => {
+      const signal = abortControllerManager.createController();
+
       try {
-        const data = await fetchItemByIdApi(id);
+        const data = await fetchItemByIdApi(id, { signal });
         if (data) {
           set((state) => {
             const updatedItems = state.content.map((item) => (item.id === id ? data : item));
@@ -110,7 +124,7 @@ export const createStore = <T extends WithId>(
             return { content: filteredItems };
           });
         }
-      } catch (error) {
+      } catch (error: unknown) {
         set((state) => {
           const filteredItems = state.content.filter((item) => item.id !== id);
           return {
@@ -140,7 +154,7 @@ export const createStore = <T extends WithId>(
           price: filters.price,
           text: filters.text,
         });
-      } catch (error) {
+      } catch (error: unknown) {
         set({ error: error instanceof Error ? error.message : 'Unknown error', loading: false });
       } finally {
         set({ loading: false });
@@ -164,6 +178,7 @@ export const createStore = <T extends WithId>(
     },
 
     resetStore: () => {
+      abortControllerManager.abort();
       set({
         content: [],
         loading: false,
@@ -183,11 +198,11 @@ export const createStore = <T extends WithId>(
 };
 
 export const useAdvertisementFilterStore = createStore<TAdvertisement>(
-  (query) => fetchAdvertisements(query),
-  (id) => fetchAdvertisementById(id),
+  (query, options) => fetchAdvertisements(query, options),
+  (id, options) => fetchAdvertisementById(id, options),
 );
 
 export const useOrderFilterStore = createStore<TOrder>(
-  (query) => fetchOrders(query),
-  (id) => fetchOrderById(id),
+  (query, options) => fetchOrders(query, options),
+  (id, options) => fetchOrderById(id, options),
 );
