@@ -35,7 +35,7 @@ const MenuButton: React.FC<MenuButtonProps> = ({ id }) => {
   };
 
   const handleDelete = async () => {
-    const success = await execute(deleteAdvertisement, id);
+    const success = await execute(deleteAdvertisement, id, false);
     if (success) {
       toast('Объявление было удалено');
       handleClose();

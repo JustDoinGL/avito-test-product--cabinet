@@ -1,13 +1,17 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import CustomTextField from 'ui/CustomTextField';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FilterForm, filterSchema } from './FilterComponent.type';
+import { FilterForm, filterSchema } from './AdvertisementFilter.type';
 import useDebounce from 'hooks/useDebounce';
-import { useAdvertisementFilterStore } from 'store/index';
+import { Filters, TFiltersAdvertisements } from 'store/useFilterStore';
 
-const FilterComponent: React.FC = () => {
+type AdvertisementFilterProps = {
+  setFilters: (filters: Partial<Filters<TFiltersAdvertisements>>) => void;
+};
+
+const AdvertisementFilter: React.FC<AdvertisementFilterProps> = ({ setFilters }) => {
   const isFirstRender = useRef(true);
   const {
     control,
@@ -25,7 +29,6 @@ const FilterComponent: React.FC = () => {
   });
 
   const formData = watch();
-  const setFilters = useAdvertisementFilterStore((state) => state.setFilters);
 
   const debouncedLikes = useDebounce(formData.likes);
   const debouncedViews = useDebounce(formData.views);
@@ -50,26 +53,11 @@ const FilterComponent: React.FC = () => {
   }, [debouncedLikes, debouncedLimit, debouncedPrice, debouncedViews, setFilters]);
 
   const handleResetFilters = () => {
-    setFilters({ likes: undefined, views: undefined, price: undefined, limit: 10, });
+    setFilters({ likes: undefined, views: undefined, price: undefined, limit: 10 });
   };
 
   return (
-    <Box
-      sx={{
-        width: '100%',
-        display: 'flex',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        gap: '30px',
-        p: 3,
-        border: '1px solid #ccc',
-        borderRadius: '8px',
-        boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-      }}
-    >
-      <Typography variant='h6' textAlign='center'>
-        Фильтр
-      </Typography>
+    <>
       <Box component='form' sx={{ display: 'flex', gap: '20px', flexDirection: 'column' }}>
         <CustomTextField label='Количество страниц' name='limit' control={control} type='number' />
         <CustomTextField label='Лайки' name='likes' control={control} type='number' />
@@ -77,8 +65,8 @@ const FilterComponent: React.FC = () => {
         <CustomTextField label='Цена' name='price' control={control} type='number' />
       </Box>
       <Button onClick={handleResetFilters}>Сбросить фильтр</Button>
-    </Box>
+    </>
   );
 };
 
-export default FilterComponent;
+export default AdvertisementFilter;

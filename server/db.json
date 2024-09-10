@@ -1,14 +1,204 @@
 {
   "advertisements": [
     {
-      "id": "2222",
-      "likes": 0,
-      "views": 0,
+      "id": "1",
+      "likes": 5,
+      "views": 100,
       "createdAt": "2024-09-10T10:38:02.093Z",
-      "name": "wqw777222dddsss22211",
-      "description": "",
-      "price": 0,
-      "imageUrl": ""
+      "name": "Товар 1",
+      "description": "Описание товара 1. Это отличный продукт для повседневного использования.",
+      "price": 100,
+      "imageUrl": "https://example.com/image1.jpg"
+    },
+    {
+      "id": "2",
+      "likes": 12,
+      "views": 200,
+      "createdAt": "2024-09-10T10:38:02.093Z",
+      "name": "Товар 2",
+      "description": "Описание товара 2. Высокое качество и доступная цена.",
+      "price": 200,
+      "imageUrl": "https://example.com/image2.jpg"
+    },
+    {
+      "id": "3",
+      "likes": 7,
+      "views": 150,
+      "createdAt": "2024-09-10T10:38:02.093Z",
+      "name": "Товар 3",
+      "description": "Описание товара 3. Идеально подходит для подарка.",
+      "price": 150,
+      "imageUrl": "https://example.com/image3.jpg"
+    },
+    {
+      "id": "4",
+      "likes": 3,
+      "views": 80,
+      "createdAt": "2024-09-10T10:38:02.093Z",
+      "name": "Товар 4",
+      "description": "Описание товара 4. Удобный и практичный.",
+      "price": 250,
+      "imageUrl": "https://example.com/image4.jpg"
+    },
+    {
+      "id": "5",
+      "likes": 20,
+      "views": 300,
+      "createdAt": "2024-09-10T10:38:02.093Z",
+      "name": "Товар 5",
+      "description": "Описание товара 5. Отличный выбор для дома.",
+      "price": 300,
+      "imageUrl": "https://example.com/image5.jpg"
+    },
+    {
+      "id": "6",
+      "likes": 15,
+      "views": 250,
+      "createdAt": "2024-09-10T10:38:02.093Z",
+      "name": "Товар 6",
+      "description": "Описание товара 6. Стильный и современный.",
+      "price": 120,
+      "imageUrl": "https://example.com/image6.jpg"
+    },
+    {
+      "id": "7",
+      "likes": 8,
+      "views": 90,
+      "createdAt": "2024-09-10T10:38:02.093Z",
+      "name": "Товар 7",
+      "description": "Описание товара 7. Надежный и долговечный.",
+      "price": 180,
+      "imageUrl": "https://example.com/image7.jpg"
+    },
+    {
+      "id": "8",
+      "likes": 25,
+      "views": 400,
+      "createdAt": "2024-09-10T10:38:02.093Z",
+      "name": "Товар 8",
+      "description": "Описание товара 8. Прекрасный выбор для активных людей.",
+      "price": 220,
+      "imageUrl": "https://example.com/image8.jpg"
+    },
+    {
+      "id": "9",
+      "likes": 10,
+      "views": 110,
+      "createdAt": "2024-09-10T10:38:02.093Z",
+      "name": "Товар 9",
+      "description": "Описание товара 9. Уникальный дизайн и функциональность.",
+      "price": 90,
+      "imageUrl": "https://example.com/image9.jpg"
+    },
+    {
+      "id": "10",
+      "likes": 6,
+      "views": 130,
+      "createdAt": "2024-09-10T10:38:02.093Z",
+      "name": "Товар 10",
+      "description": "Описание товара 10. Легкий и удобный в использовании.",
+      "price": 130,
+      "imageUrl": "https://example.com/image10.jpg"
+    },
+    {
+      "id": "11",
+      "likes": 4,
+      "views": 70,
+      "createdAt": "2024-09-10T10:38:02.093Z",
+      "name": "Товар 11",
+      "description": "Описание товара 11. Идеально подходит для путешествий.",
+      "price": 160,
+      "imageUrl": "https://example.com/image11.jpg"
+    },
+    {
+      "id": "12",
+      "likes": 18,
+      "views": 320,
+      "createdAt": "2024-09-10T10:38:02.093Z",
+      "name": "Товар 12",
+      "description": "Описание товара 12. Высокая производительность и надежность.",
+      "price": 240,
+      "imageUrl": "https://example.com/image12.jpg"
+    },
+    {
+      "id": "13",
+      "likes": 9,
+      "views": 140,
+      "createdAt": "2024-09-10T10:38:02.093Z",
+      "name": "Товар 13",
+      "description": "Описание товара 13. Отличное качество по доступной цене.",
+      "price": 110,
+      "imageUrl": "https://example.com/image13.jpg"
+    },
+    {
+      "id": "14",
+      "likes": 11,
+      "views": 160,
+      "createdAt": "2024-09-10T10:38:02.093Z",
+      "name": "Товар 14",
+      "description": "Описание товара 14. Удобный и стильный.",
+      "price": 170,
+      "imageUrl": "https://example.com/image14.jpg"
+    },
+    {
+      "id": "15",
+      "likes": 14,
+      "views": 180,
+      "createdAt": "2024-09-10T10:38:02.093Z",
+      "name": "Товар 15",
+      "description": "Описание товара 15. Идеальный выбор для дома и офиса.",
+      "price": 190,
+      "imageUrl": "https://example.com/image15.jpg"
+    },
+    {
+      "id": "16",
+      "likes": 2,
+      "views": 50,
+      "createdAt": "2024-09-10T10:38:02.093Z",
+      "name": "Товар 16",
+      "description": "Описание товара 16. Прекрасный подарок для близких.",
+      "price": 130,
+      "imageUrl": "https://example.com/image16.jpg"
+    },
+    {
+      "id": "17",
+      "likes": 30,
+      "views": 500,
+      "createdAt": "2024-09-10T10:38:02.093Z",
+      "name": "Товар 17",
+      "description": "Описание товара 17. Высокое качество и надежность.",
+      "price": 210,
+      "imageUrl": "https://example.com/image17.jpg"
+    },
+    {
+      "id": "18",
+      "likes": 8,
+      "views": 120,
+      "createdAt": "2024-09-10T10:38:02.093Z",
+      "name": "Товар 18",
+      "description": "Описание товара 18. Идеально подходит для активного отдыха.",
+      "price": 140,
+      "imageUrl": "https://example.com/image18.jpg"
+    },
+    {
+      "id": "19",
+      "likes": 22,
+      "views": 300,
+      "createdAt": "2024-09-10T10:38:02.093Z",
+      "name": "Товар 19",
+      "description": "Описание товара 19. Удобный и практичный.",
+      "price": 180,
+      "imageUrl": "https://example.com/image19.jpg"
+    },
+    {
+      "id": "20",
+      "likes": 16,
+      "views": 240,
+      "createdAt": "2024-09-10T10:38:02.093Z",
+      "name": "Товар 20",
+      "description": "Описание товара 20. Отличный выбор для дома.",
+      "price": 220,
+      "imageUrl": "https://example.com/image20.jpg"
     }
   ],
   "orders": [

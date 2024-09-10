@@ -40,7 +40,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product, handleGoBack }
   };
 
   const handleDelete = async () => {
-    const success = await execute(deleteAdvertisement, product.id);
+    const success = await execute(deleteAdvertisement, product.id, false);
     if (success) {
       toast('Объявление было удалено');
       navigate(RoutePaths.AllAdvertisements);

@@ -74,8 +74,8 @@ const AdvertisementForm: React.FC<AdvertisementFormProps> = ({ closeModal, isNav
       };
 
       const success = id
-        ? await saveAdvertisement(updateAdvertisement, advertisement)
-        : await saveAdvertisement(createAdvertisement, advertisement);
+        ? await saveAdvertisement(updateAdvertisement, advertisement, false)
+        : await saveAdvertisement(createAdvertisement, advertisement, false);
 
       if (!success) {
         setError('root', { type: 'manual', message: `Произошла ошибка при выполнении запроса` });
