@@ -1,11 +1,11 @@
 import { useState, useCallback, useEffect } from 'react';
-import { AbortControllerManager } from 'utils/helpers/AbortControllerManager'; // Импортируем класс
+import { AbortControllerManager } from 'utils/helpers/AbortControllerManager';
 
 type UseApiResult<T, R> = {
   execute: (
     apiFunction: (data: T, options?: { signal?: AbortSignal }) => Promise<R>,
     data: T,
-    useAbortController?: boolean, // Добавляем параметр для управления AbortController
+    useAbortController?: boolean,
   ) => Promise<R | null>;
   isLoading: boolean;
   error: string | null;
@@ -58,7 +58,7 @@ const useApi = <T, R>(): UseApiResult<T, R> => {
 
   useEffect(() => {
     return () => {
-      abortControllerManager.abort(); // Отменяем все активные запросы при размонтировании
+      abortControllerManager.abort();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
