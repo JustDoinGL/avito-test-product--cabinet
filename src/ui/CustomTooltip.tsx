@@ -1,6 +1,5 @@
-import * as React from 'react';
-import { SxProps, Theme, styled } from '@mui/material/styles';
-import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
+import { SxProps, Theme, styled, Tooltip, TooltipProps, tooltipClasses  } from '@mui/material';
+import React from 'react';
 
 interface PromoteTooltipProps {
   children: React.ReactElement;

@@ -1,32 +1,36 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { TextField, Button, Box } from '@mui/material';
 import useDebounce from 'hooks/useDebounce';
 import { colors, sizes } from 'utils/styles';
-import useGlobalStore from 'store/useStore';
-import { useAdvertisementStore } from 'pages/MainPage/useFilterStore';
+import { useAdvertisementFilterStore, useModalStore } from 'store/index';
 
 type SearchComponentProps = {
   isMainPage: boolean;
 };
 
 const SearchComponent: React.FC<SearchComponentProps> = ({ isMainPage }) => {
-  const setOpen = useGlobalStore((store) => store.setOpen);
-  const setFilters = useAdvertisementStore((store) => store.setFilters);
+  const setOpen = useModalStore((store) => store.setOpen);
+  const setFilters = useAdvertisementFilterStore((store) => store.setFilters);
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
+  const isFirstRender = useRef(true);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchTerm(event.target.value);
   };
 
   useEffect(() => {
-    if (isMainPage) {
-      if (debouncedSearchTerm.length > 0) {
-        setFilters({ text: debouncedSearchTerm });
-      } else {
-        setFilters({ text: undefined });
-      }
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
     }
+
+    if (debouncedSearchTerm.length > 0) {
+      setFilters({ text: debouncedSearchTerm });
+    } else {
+      setFilters({ text: undefined });
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearchTerm]);
 
@@ -46,7 +50,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ isMainPage }) => {
           color='primary'
           onClick={() => setOpen(true)}
           sx={{
-            maxWidth: '100px',
+            maxWidth: '150px',
             bgcolor: colors.success,
             [`@media (max-width: ${sizes.tablet})`]: { display: 'none' },
           }}

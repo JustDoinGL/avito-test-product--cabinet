@@ -20,4 +20,4 @@ RUN npm run build
 CMD ["npm", "run", "dev"]
 
 # Открываем порты, на которых будут работать приложение и json-server
-EXPOSE 3000 4173
+EXPOSE 3000 5173

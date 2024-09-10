@@ -3,33 +3,26 @@ import { Card } from '@mui/material';
 import { TAdvertisement } from 'types/Advertisement';
 import { Link } from 'react-router-dom';
 import { RoutePaths } from 'utils/routes/routes';
-import { AdvertisementInfo, AdvertisementMenu, MenuButton } from './component';
+import AdvertisementInfo from './component/AdvertisementInfo';
+import MenuButton from 'components/MenuComponent/MenuButton';
+import { sizes } from 'utils/styles';
 
 interface AdvertisementCardProps {
   content: TAdvertisement;
+  isAdvertisementMenu?: boolean;
 }
 
-const AdvertisementCard: React.FC<AdvertisementCardProps> = ({ content }) => {
+const AdvertisementCard: React.FC<AdvertisementCardProps> = ({ content, isAdvertisementMenu }) => {
   const { id } = content;
-
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    event.stopPropagation();
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
 
   return (
     <Card
       sx={{
-        maxWidth: '500px',
+        maxWidth: '600px',
+        width: '90%',
+        margin: '20px auto',
+        marginTop: '0',
         position: 'relative',
-        margin: '20px',
         boxShadow: 3,
         border: '1px solid #ccc',
         transition: '0.3s',
@@ -37,13 +30,14 @@ const AdvertisementCard: React.FC<AdvertisementCardProps> = ({ content }) => {
           boxShadow: 6,
           transform: 'scale(1.02)',
         },
+        [`@media (max-width: ${sizes.tablet})`]: { width: '95%' },
       }}
     >
       <Link to={RoutePaths.Advertisement(id)} style={{ textDecoration: 'none', color: 'inherit' }}>
         <AdvertisementInfo content={content} />
       </Link>
-      <MenuButton onClick={handleClick} />
-      <AdvertisementMenu anchorEl={anchorEl} open={open} onClose={handleClose} />
+
+      {isAdvertisementMenu && <MenuButton id={id} />}
     </Card>
   );
 };

@@ -40,7 +40,7 @@ export const filterSchema = z.object({
       return parsedValue;
     }
     return value;
-  }, z.number().min(5, 'Минимальный показ продуктов 5').max(30, 'Количество записей не может превышать 30')),
+  }, z.number().min(5, 'Минимальный показ записей 5').max(30, 'Количество записей не может превышать 30')),
 });
 
 export type FilterForm = z.infer<typeof filterSchema>;

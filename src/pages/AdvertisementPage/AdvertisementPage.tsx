@@ -6,14 +6,12 @@ import ProductDetails from './components/ProductCard';
 import useApi from 'hooks/useApi';
 import { useEffect, useState } from 'react';
 import { TAdvertisement } from 'types/Advertisement';
-import useGlobalStore from 'store/useStore';
 import { CustomLoader } from 'ui/index';
 
 const AdvertisementPage: React.FC = () => {
-  const advertisementData = useGlobalStore((store) => store.advertisementData);
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [data, setData] = useState<TAdvertisement | null>(advertisementData);
+  const [data, setData] = useState<TAdvertisement | null>();
   const { execute, isLoading, error } = useApi<string, TAdvertisement>();
 
   const handleGoBack = () => {
@@ -26,27 +24,22 @@ const AdvertisementPage: React.FC = () => {
 
   const fetchData = async (id: string) => {
     const advertisement = await execute(fetchAdvertisementById, id);
-    if (advertisement) {
-      setData(advertisement);
-    }
+
+    setData(advertisement);
   };
 
   useEffect(() => {
     if (id) {
-      if (advertisementData) {
-        setData(advertisementData);
-      } else {
-        fetchData(id);
-      }
+      fetchData(id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id, advertisementData]);
+  }, [id]);
 
   if (!id || error) {
     return (
       <Box display='flex' flexDirection='column' alignItems='center' justifyContent='center' height='100vh'>
-        <Typography variant='h6' color='error'>
-          Произошла ошибка: {error ? error : 'Некорректный ID'}
+        <Typography variant='h6' color='error' textAlign='center'>
+          Произошла ошибка: {'Некорректный ID или ' + error}
         </Typography>
         <Button variant='contained' color='primary' onClick={handleGoBack} sx={{ mt: 2 }}>
           Вернуться назад

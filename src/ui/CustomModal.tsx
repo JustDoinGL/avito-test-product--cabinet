@@ -13,6 +13,8 @@ interface CustomModalProps {
 
 const ModalContent = styled(Box)({
   width: '80%',
+  display: 'flex',
+  justifyContent: 'center',
   maxHeight: '70%',
   maxWidth: '700px',
   overflow: 'auto',
@@ -26,7 +28,9 @@ const ModalContent = styled(Box)({
   [`@media (max-width: ${sizes.tablet})`]: {
     width: '100%',
     maxWidth: '100vw',
-    padding: '8px',
+    padding: '10px',
+    paddingTop: '35px',
+    paddingBottom: '20px',
     position: 'absolute',
     bottom: 0,
     left: 0,
