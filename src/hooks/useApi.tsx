@@ -2,7 +2,11 @@ import { useState, useCallback, useEffect } from 'react';
 import { AbortControllerManager } from 'utils/helpers/AbortControllerManager'; // Импортируем класс
 
 type UseApiResult<T, R> = {
-  execute: (apiFunction: (data: T, options?: { signal?: AbortSignal }) => Promise<R>, data: T) => Promise<R | null>;
+  execute: (
+    apiFunction: (data: T, options?: { signal?: AbortSignal }) => Promise<R>,
+    data: T,
+    useAbortController?: boolean, // Добавляем параметр для управления AbortController
+  ) => Promise<R | null>;
   isLoading: boolean;
   error: string | null;
 };
@@ -13,8 +17,12 @@ const useApi = <T, R>(): UseApiResult<T, R> => {
   const abortControllerManager = new AbortControllerManager();
 
   const execute = useCallback(
-    async (apiFunction: (data: T, options?: { signal?: AbortSignal }) => Promise<R>, data: T): Promise<R | null> => {
-      const signal = abortControllerManager.createController();
+    async (
+      apiFunction: (data: T, options?: { signal?: AbortSignal }) => Promise<R>,
+      data: T,
+      useAbortController: boolean = true,
+    ): Promise<R | null> => {
+      const signal = useAbortController ? abortControllerManager.createController() : undefined;
 
       setIsLoading(true);
       setError(null);
@@ -30,7 +38,7 @@ const useApi = <T, R>(): UseApiResult<T, R> => {
         } catch (err) {
           attempt++;
           if (attempt >= maxRetries) {
-            if (signal.aborted) {
+            if (signal && signal.aborted) {
               console.log('Request was aborted');
             }
             setError(err instanceof Error ? err.message : 'An unknown error occurred');
@@ -50,7 +58,7 @@ const useApi = <T, R>(): UseApiResult<T, R> => {
 
   useEffect(() => {
     return () => {
-      abortControllerManager.abort();
+      abortControllerManager.abort(); // Отменяем все активные запросы при размонтировании
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
