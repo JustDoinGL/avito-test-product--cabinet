@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { RoutePaths } from 'utils/routes/routes';
 import AdvertisementInfo from './component/AdvertisementInfo';
 import MenuButton from 'components/MenuComponent/MenuButton';
+import { sizes } from 'utils/styles';
 
 interface AdvertisementCardProps {
   content: TAdvertisement;
@@ -17,9 +18,11 @@ const AdvertisementCard: React.FC<AdvertisementCardProps> = ({ content, isAdvert
   return (
     <Card
       sx={{
-        maxWidth: '500px',
+        maxWidth: '600px',
+        width: '90%',
+        margin: '20px auto',
+        marginTop: '0',
         position: 'relative',
-        margin: '20px',
         boxShadow: 3,
         border: '1px solid #ccc',
         transition: '0.3s',
@@ -27,6 +30,7 @@ const AdvertisementCard: React.FC<AdvertisementCardProps> = ({ content, isAdvert
           boxShadow: 6,
           transform: 'scale(1.02)',
         },
+        [`@media (max-width: ${sizes.tablet})`]: { width: '95%' },
       }}
     >
       <Link to={RoutePaths.Advertisement(id)} style={{ textDecoration: 'none', color: 'inherit' }}>

@@ -38,8 +38,8 @@ const AdvertisementPage: React.FC = () => {
   if (!id || error) {
     return (
       <Box display='flex' flexDirection='column' alignItems='center' justifyContent='center' height='100vh'>
-        <Typography variant='h6' color='error'>
-          Произошла ошибка: {error ? error : 'Некорректный ID'}
+        <Typography variant='h6' color='error' textAlign='center'>
+          Произошла ошибка: {'Некорректный ID или ' + error}
         </Typography>
         <Button variant='contained' color='primary' onClick={handleGoBack} sx={{ mt: 2 }}>
           Вернуться назад

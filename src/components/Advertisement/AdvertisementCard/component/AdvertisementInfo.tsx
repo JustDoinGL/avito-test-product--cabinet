@@ -14,7 +14,15 @@ const AdvertisementInfo: React.FC<AdvertisementInfoProps> = ({ content }) => {
   const { name, description, price, views, likes, createdAt, imageUrl } = content;
 
   return (
-    <Box sx={{ border: '1px solid #e0e0e0', borderRadius: '8px', overflow: 'hidden', boxShadow: 2, padding: 2 }}>
+    <Box
+      sx={{
+        border: '1px solid #e0e0e0',
+        borderRadius: '8px',
+        overflow: 'hidden',
+        boxShadow: 2,
+        padding: 2,
+      }}
+    >
       <CardMedia
         component='img'
         height='140'
@@ -48,14 +56,14 @@ const AdvertisementInfo: React.FC<AdvertisementInfoProps> = ({ content }) => {
           {formatNumber(price)} ₽
         </Typography>
 
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 1 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 1, flexWrap: 'wrap', gap: '10px' }}>
           <Chip
             icon={<VisibilityIcon />}
             label={`Просмотров: ${formatNumber(views)}`}
             variant='outlined'
             color='info'
             size='small'
-            sx={{ marginRight: 1 }}
+            sx={{ marginRight: 1, margin: '0 auto' }}
           />
           <Chip
             icon={<FavoriteIcon />}
@@ -63,6 +71,7 @@ const AdvertisementInfo: React.FC<AdvertisementInfoProps> = ({ content }) => {
             variant='outlined'
             color='error'
             size='small'
+            sx={{ margin: '0 auto' }}
           />
         </Box>
 

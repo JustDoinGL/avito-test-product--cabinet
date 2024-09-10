@@ -35,7 +35,7 @@ const MainPage = () => {
         hasMore={hasMore}
         loader={loading ? <CustomLoader /> : null}
         endMessage={
-          <Typography color={colors.primary} textAlign='center' mb='20px'>
+          <Typography color={colors.primary} textAlign='center' marginY='20px'>
             Больше нет данных
           </Typography>
         }

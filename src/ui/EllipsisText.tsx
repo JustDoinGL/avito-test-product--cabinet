@@ -1,6 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
-import { Box, SxProps, Theme, Typography } from '@mui/material';
-import { styled } from '@mui/system';
+import { Box, styled, SxProps, Theme, Typography } from '@mui/material';
 import CustomTooltip from './CustomTooltip';
 
 interface StyledTextProps {
@@ -40,7 +39,7 @@ const EllipsisText: React.FC<EllipsisTextProps> = ({ text, sx }) => {
   }, [maxWidth, text]);
 
   return (
-    <Box ref={containerRef} sx={{ width: '100%', margin:'0 auto' }}>
+    <Box ref={containerRef} sx={{ width: '100%', margin: '0 auto' }}>
       <CustomTooltip title={isOverflowed ? text : ''} placement='top-start'>
         <StyledText ref={textRef} maxWidth={maxWidth} sx={sx}>
           {text}
