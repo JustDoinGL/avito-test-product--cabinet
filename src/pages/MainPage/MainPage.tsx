@@ -5,18 +5,20 @@ import AdvertisementCard from 'components/Advertisement/AdvertisementCard/Advert
 import { Typography } from '@mui/material';
 import { colors } from 'utils/styles';
 import { useEffect } from 'react';
-import { useModalStore, useAdvertisementFilterStore } from 'store/index';
+import { useModalStore, useAdvertisementFilterStore, useIdStore } from 'store/index';
 import { AdvertisementFilter } from 'components/Filters';
 
 const MainPage = () => {
   const { content, loadMoreItems, hasMore, loading, fetchItems, resetStore, setId, id } = useAdvertisementFilterStore();
   const { isOpen, reset, currentModal } = useModalStore((store) => store);
+  const { reset: resetId } = useIdStore();
 
   useEffect(() => {
     fetchItems({ start: 0, limit: 10 });
 
     return () => {
       resetStore();
+      resetId();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

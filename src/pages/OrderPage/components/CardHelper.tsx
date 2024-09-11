@@ -3,13 +3,14 @@ import AdvertisementCard from 'components/Advertisement/AdvertisementCard/Advert
 import { OrderDetails, OrderModal } from './components';
 import MenuButton from 'components/MenuComponent/MenuButton';
 import { sizes } from 'utils/styles';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import useModalStore from 'store/useModalStore';
 import useApi from 'hooks/useApi';
 import { TOrder } from 'types/Order';
 import { useOrderFilterStore } from 'store/useFilterStore';
 import { TUpdateOder, updateOrder } from 'api/orders/ordersQuery';
+import useIdStore from 'store/useIdStore';
 
 type CardHelperProps = {
   order: TOrder;
@@ -18,9 +19,19 @@ type CardHelperProps = {
 const CardHelper: React.FC<CardHelperProps> = ({ order }) => {
   const isLaptop = useMediaQuery(`(min-width:${sizes.laptop})`);
   const { setId, update } = useOrderFilterStore();
+  const { id } = useIdStore();
   const { setOpen } = useModalStore();
   const { execute } = useApi<TUpdateOder, TOrder>();
   const [openModal, setOpenModal] = useState<string | null>(null);
+  const [isWatchedBefore, setIsWatchedBefore] = useState(false);
+
+  useEffect(() => {
+    if (order.items.some((item) => item.id === id)) {
+      setIsWatchedBefore(true);
+    } else {
+      setIsWatchedBefore(false);
+    }
+  }, [order.items, id]);
 
   const handleOpenModal = (orderId: string) => {
     setOpenModal(orderId);
@@ -48,14 +59,14 @@ const CardHelper: React.FC<CardHelperProps> = ({ order }) => {
 
         const success = await execute(updateOrder, orderUpdate, false);
         if (success) {
-          toast('Объявление было заверщено');
+          toast('Объявление было завершено');
           handleClose();
           update(order.id);
         } else {
-          toast('Ошибка при удалении объявление.');
+          toast('Ошибка при удалении объявления.');
         }
       },
-      label: 'Заверщить',
+      label: 'Завершить',
     },
   ];
 
@@ -70,10 +81,7 @@ const CardHelper: React.FC<CardHelperProps> = ({ order }) => {
         borderRadius: '12px',
         boxShadow: 3,
         transition: '0.3s',
-        '&:hover': {
-          boxShadow: 6,
-          transform: 'translateY(-2px)',
-        },
+        border: isWatchedBefore ? '2px solid #d32f2f' : 'none',
         padding: '10px',
       }}
     >
@@ -87,6 +95,12 @@ const CardHelper: React.FC<CardHelperProps> = ({ order }) => {
         }}
       >
         <OrderDetails order={order} />
+
+        {isWatchedBefore && (
+          <Typography variant='body1' color='info' sx={{ marginBottom: 2, fontSize: '20px' }}>
+            Тут есть товар, который вы смотрели раньше
+          </Typography>
+        )}
 
         <Divider sx={{ marginY: 2 }} />
 

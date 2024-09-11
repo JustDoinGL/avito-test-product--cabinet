@@ -7,12 +7,14 @@ import useApi from 'hooks/useApi';
 import { useEffect, useState } from 'react';
 import { TAdvertisement } from 'types/Advertisement';
 import { CustomLoader } from 'ui/index';
+import useIdStore from 'store/useIdStore';
 
 const AdvertisementPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [data, setData] = useState<TAdvertisement | null>();
   const { execute, isLoading, error } = useApi<string, TAdvertisement>();
+  const { setId } = useIdStore();
 
   const handleGoBack = () => {
     if (window.history.length > 2) {
@@ -31,6 +33,7 @@ const AdvertisementPage: React.FC = () => {
   useEffect(() => {
     if (id) {
       fetchData(id);
+      setId(id);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
