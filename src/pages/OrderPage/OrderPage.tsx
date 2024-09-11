@@ -7,9 +7,10 @@ import OrderCard from './components/OrderCard';
 import { useModalStore, useOrderFilterStore } from 'store/index';
 import CustomModal from 'ui/CustomModal';
 import { OrderFilter } from 'components/Filters';
+import OrderForm from 'components/FormOrder/FormOrder';
 
 const OrderPage = () => {
-  const { content, loadMoreItems, hasMore, loading, fetchItems, resetStore } = useOrderFilterStore();
+  const { content, loadMoreItems, hasMore, loading, fetchItems, resetStore, id, setId } = useOrderFilterStore();
   const { isOpen, reset, currentModal } = useModalStore();
 
   useEffect(() => {
@@ -23,7 +24,7 @@ const OrderPage = () => {
 
   const handleCloseModal = () => {
     reset();
-    // setId(null);
+    setId(null);
   };
 
   return (
@@ -41,16 +42,18 @@ const OrderPage = () => {
           </Typography>
         }
       >
-        <OrderCard orders={content} />
+        {content.length > 0 && <OrderCard orders={content} />}
       </InfiniteScroll>
 
       <CustomModal open={isOpen && currentModal === 'orderFilters'} onClose={handleCloseModal}>
         <OrderFilter />
       </CustomModal>
 
-      {/* <CustomModal open={isOpen && currentModal === 'order'} onClose={handleCloseModal}>
-        <AdvertisementForm closeModal={handleCloseModal} id={id ? id : undefined} isNavigate={false} />
-      </CustomModal> */}
+      {id && (
+        <CustomModal open={isOpen && currentModal === 'order'} onClose={handleCloseModal}>
+          <OrderForm closeModal={handleCloseModal} id={id} />
+        </CustomModal>
+      )}
     </>
   );
 };

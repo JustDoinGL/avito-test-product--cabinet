@@ -5,8 +5,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import useDebounce from 'hooks/useDebounce';
 import { OrderFilterForm, orderFilterSchema } from './OrderFilter.types';
 import { useOrderFilterStore } from 'store/useFilterStore';
-import { limitConst } from 'utils/const/Limit';
+import { limitConst } from 'utils/const/limitConst';
 import CustomStatusSelect from 'ui/CustomStatusSelect';
+import { orderStatusOptions } from 'utils/const/orderStatusOptions';
 
 const OrderFilter: React.FC = () => {
   const isFirstRender = useRef(true);
@@ -67,8 +68,12 @@ const OrderFilter: React.FC = () => {
       <Box component='form' sx={{ display: 'flex', gap: '20px', flexDirection: 'column' }}>
         <CustomStatusSelect control={control} name='limit' title='Количество карточек' statusOptions={limitConst} />
 
-        {/* <CustomTextField label='Статус' name='status' control={control} type='number' />
-        <CustomTextField label='Сумма заказа' name='total' control={control} type='number' /> */}
+        <CustomStatusSelect
+          control={control}
+          name='status'
+          title='Количество карточек'
+          statusOptions={orderStatusOptions}
+        />
       </Box>
       <Button onClick={handleResetFilters}>Сбросить фильтр</Button>
     </Box>

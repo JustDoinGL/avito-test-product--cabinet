@@ -18,7 +18,7 @@ export type TOrder = {
     /* Уникальный идентификатор. */
     id: string;
     /* Статус заказа. */
-    status: OrderStatusType;
+    status: number;
     /* Дата и время создания заказа. */
     createdAt: string;
     /* Дата и время завершения заказа (опционально). */

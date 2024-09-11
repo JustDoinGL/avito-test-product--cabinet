@@ -7,7 +7,7 @@ import { FilterForm, filterSchema } from './AdvertisementFilter.type';
 import useDebounce from 'hooks/useDebounce';
 import { useAdvertisementFilterStore } from 'store/useFilterStore';
 import CustomStatusSelect from 'ui/CustomStatusSelect';
-import { limitConst } from 'utils/const/Limit';
+import { limitConst } from 'utils/const/limitConst';
 
 const AdvertisementFilter: React.FC = () => {
   const isFirstRender = useRef(true);
@@ -69,10 +69,28 @@ const AdvertisementFilter: React.FC = () => {
       </Typography>
       <Box component='form' sx={{ display: 'flex', gap: '20px', flexDirection: 'column' }}>
         <CustomStatusSelect control={control} name='limit' title='Количество карточек' statusOptions={limitConst} />
-
-        <CustomTextField label='Минимальное колличество лайков' name='likes' control={control} type='number' placeholder='Введите число лайков' />
-        <CustomTextField label='Минимальное колличество просмотров' name='views' control={control} type='number' placeholder='Введите число просмотров' />
-        <CustomTextField label='Минимальная цена' name='price' control={control} type='number' placeholder='Введите цену' />
+        <CustomTextField
+          label='Минимальное колличество лайков'
+          name='likes'
+          control={control}
+          type='number'
+          placeholder='Введите число лайков'
+        />
+        <CustomTextField
+          label='Минимальное колличество просмотров'
+          name='views'
+          control={control}
+          type='number'
+          placeholder='Введите число просмотров'
+        />
+        
+        <CustomTextField
+          label='Минимальная цена'
+          name='price'
+          control={control}
+          type='number'
+          placeholder='Введите цену'
+        />
       </Box>
       <Button onClick={handleResetFilters}>Сбросить фильтр</Button>
     </Box>
