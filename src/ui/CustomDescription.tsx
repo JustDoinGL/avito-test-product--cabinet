@@ -39,7 +39,6 @@ const CustomDescription: React.FC<{ description: string; maxRows?: number; maxCh
           textOverflow: 'ellipsis',
           maxHeight: expanded ? 'none' : `${maxRows * 1.5}em`,
           lineHeight: '1.5em',
-          whiteSpace: expanded ? 'normal' : 'nowrap',
           wordWrap: 'break-word',
           overflowWrap: 'break-word',
         }}
