@@ -6,10 +6,11 @@ import { Typography } from '@mui/material';
 import { colors } from 'utils/styles';
 import { useEffect } from 'react';
 import { useModalStore, useAdvertisementFilterStore } from 'store/index';
+import { AdvertisementFilter } from 'components/Filters';
 
 const MainPage = () => {
   const { content, loadMoreItems, hasMore, loading, fetchItems, resetStore, setId, id } = useAdvertisementFilterStore();
-  const { isOpen, setOpen } = useModalStore((store) => store);
+  const { isOpen, reset, currentModal } = useModalStore((store) => store);
 
   useEffect(() => {
     fetchItems({ start: 0, limit: 10 });
@@ -21,7 +22,7 @@ const MainPage = () => {
   }, []);
 
   const handleCloseModal = () => {
-    setOpen(false);
+    reset();
     setId(null);
   };
 
@@ -45,7 +46,11 @@ const MainPage = () => {
         ))}
       </InfiniteScroll>
 
-      <CustomModal open={isOpen} onClose={handleCloseModal}>
+      <CustomModal open={isOpen && currentModal === 'advertisementFilters'} onClose={handleCloseModal}>
+        <AdvertisementFilter />
+      </CustomModal>
+
+      <CustomModal open={isOpen && currentModal === 'advertisement'} onClose={handleCloseModal}>
         <AdvertisementForm closeModal={handleCloseModal} id={id ? id : undefined} isNavigate={false} />
       </CustomModal>
     </>

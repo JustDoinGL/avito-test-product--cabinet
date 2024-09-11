@@ -26,9 +26,9 @@ const ModalContent = styled(Box)({
   boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
   transition: 'transform 0.3s ease',
   [`@media (max-width: ${sizes.tablet})`]: {
-    width: '100%',
-    maxWidth: '100vw',
-    padding: '10px',
+    boxSizing: 'border-box',
+    width: ' 100vw',
+    margin: '0 auto',
     paddingTop: '35px',
     paddingBottom: '20px',
     position: 'absolute',
@@ -53,7 +53,7 @@ const CustomModal: React.FC<CustomModalProps> = ({ open, onClose, children, sx }
     >
       <ModalContent sx={sx}>
         <IconButton
-          sx={{ position: 'absolute', top: '10px', right: '15px' }}
+          sx={{ position: 'absolute', top: '0', right: '5px' }}
           onClick={onClose}
           aria-label='Close modal'
         >

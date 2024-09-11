@@ -13,10 +13,14 @@ interface OrderCardProps {
 
 const OrderCard: React.FC<OrderCardProps> = ({ orders }) => {
   const isLaptop = useMediaQuery(`(min-width:${sizes.laptop})`);
-  const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState<string | null>(null);
+
+  const handleOpenModal = (orderId: string) => {
+    setOpenModal(orderId);
+  };
 
   const handleCloseModal = () => {
-    setOpenModal(false);
+    setOpenModal(null);
   };
 
   return (
@@ -79,20 +83,27 @@ const OrderCard: React.FC<OrderCardProps> = ({ orders }) => {
             </Box>
             <Divider sx={{ marginY: 2 }} />
 
-            {isLaptop && <AdvertisementCard key={order.items[0].id} content={order.items[0]} isAdvertisementMenu />}
+            {isLaptop && (
+              <AdvertisementCard key={order.items[0].id} content={order.items[0]} count={order.items[0].count} />
+            )}
 
             <Typography variant='h5' align='right' sx={{ fontWeight: 'bold', color: '#d32f2f' }}>
               Итого: {order.total} ₽
             </Typography>
 
-            <Button variant='contained' color='primary' onClick={() => setOpenModal(true)} sx={{ marginTop: 2 }}>
+            <Button
+              variant='contained'
+              color='primary'
+              onClick={() => handleOpenModal(order.id)}
+              sx={{ marginTop: 2 }}
+            >
               {isLaptop ? 'Показать все товары' : 'Показать товары'}
             </Button>
           </CardContent>
 
           <MenuButton id={order.id} />
 
-          <CustomModal open={openModal} onClose={handleCloseModal}>
+          <CustomModal open={openModal === order.id} onClose={handleCloseModal}>
             <Box
               sx={{
                 maxWidth: '85%',
@@ -102,7 +113,7 @@ const OrderCard: React.FC<OrderCardProps> = ({ orders }) => {
               }}
             >
               {order.items.map((card) => (
-                <AdvertisementCard key={card.id} content={card} />
+                <AdvertisementCard key={card.id} content={card} count={card.count} />
               ))}
             </Box>
           </CustomModal>

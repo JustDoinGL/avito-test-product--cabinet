@@ -1,13 +1,15 @@
-import { CardContent, CardMedia, Typography, Box, Chip, Divider } from '@mui/material';
+import { CardContent, Typography, Box, Chip, Divider } from '@mui/material';
 import { TAdvertisement } from 'types/Advertisement';
 import CustomDescription from 'ui/CustomDescription';
 import EllipsisText from 'ui/EllipsisText';
 import { formatDate, formatNumber } from 'utils/helpers';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import CustomImage from 'ui/CustomImage';
 
 interface AdvertisementInfoProps {
   content: TAdvertisement;
+  count?: number;
 }
 
 const AdvertisementInfo: React.FC<AdvertisementInfoProps> = ({ content }) => {
@@ -23,13 +25,8 @@ const AdvertisementInfo: React.FC<AdvertisementInfoProps> = ({ content }) => {
         padding: 2,
       }}
     >
-      <CardMedia
-        component='img'
-        height='140'
-        image={imageUrl || '/notFound.jpg'}
-        alt={imageUrl ? name : 'Not Found Img'}
-        sx={{ objectFit: 'cover', borderRadius: '8px' }}
-      />
+      <CustomImage imageUrl={imageUrl} alt={name} />
+
       <CardContent sx={{ textAlign: 'center' }}>
         <Typography variant='h6' sx={{ fontWeight: 'bold', marginBottom: 1, color: '#333' }}>
           Название:
@@ -45,7 +42,7 @@ const AdvertisementInfo: React.FC<AdvertisementInfoProps> = ({ content }) => {
           Описание:
         </Typography>
         {description ? (
-          <CustomDescription description={description} maxRows={3} />
+          <CustomDescription description={description} maxRows={3} maxChars={description.length} />
         ) : (
           <Typography variant='body2' color='text.secondary'>
             Описание отсутствует

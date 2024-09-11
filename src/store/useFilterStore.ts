@@ -8,7 +8,6 @@ import { AbortControllerManager } from 'utils/helpers/AbortControllerManager';
 
 export type Filters<T> = T & {
   limit?: number;
-  text?: string;
 };
 
 type WithId = {
@@ -65,7 +64,11 @@ export const createStore = <T extends WithId, F>(
 
       Object.entries(restFilters).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
-          queryParams[key] = value;
+          if (typeof value === 'string' || typeof value === 'number') {
+            queryParams[key] = value;
+          } else {
+            console.warn(`Value for ${key} is not a string or number:`, value);
+          }
         }
       });
 
@@ -177,27 +180,25 @@ export const createStore = <T extends WithId, F>(
 };
 
 export type TFiltersOrder = {
-  limit?: number;
-  text?: string;
   status?: number;
-  total?: number;
+  total_gte?: number;
 };
 
 export type TFiltersAdvertisements = {
-  likes?: number;
-  views?: number;
-  price?: number;
-  limit?: number;
-  text?: string;
+  likes_gte?: number;
+  views_gte?: number;
+  price_gte?: number;
+  name?: string;
 };
 
 export const useAdvertisementFilterStore = createStore<TAdvertisement, TFiltersAdvertisements>(
   (query, options) => fetchAdvertisements(query, options),
   (id, options) => fetchAdvertisementById(id, options),
   {
-    likes: undefined,
-    views: undefined,
-    price: undefined,
+    likes_gte: undefined,
+    views_gte: undefined,
+    price_gte: undefined,
+    name: undefined,
   },
 );
 
@@ -206,6 +207,6 @@ export const useOrderFilterStore = createStore<TOrder, TFiltersOrder>(
   (id, options) => fetchOrderById(id, options),
   {
     status: undefined,
-    total: undefined,
+    total_gte: undefined,
   },
 );
