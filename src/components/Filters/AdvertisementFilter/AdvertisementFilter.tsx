@@ -6,11 +6,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { FilterForm, filterSchema } from './AdvertisementFilter.type';
 import useDebounce from 'hooks/useDebounce';
 import { useAdvertisementFilterStore } from 'store/useFilterStore';
+import CustomStatusSelect from 'ui/CustomStatusSelect';
+import { limitConst } from 'utils/const/limitConst';
 
 const AdvertisementFilter: React.FC = () => {
   const isFirstRender = useRef(true);
   const { setFilters } = useAdvertisementFilterStore();
-  const { control, watch, formState } = useForm<FilterForm>({
+  const { control, watch, reset } = useForm<FilterForm>({
     resolver: zodResolver(filterSchema),
     mode: 'onChange',
     defaultValues: {
@@ -20,7 +22,7 @@ const AdvertisementFilter: React.FC = () => {
       limit: 10,
     },
   });
-  const { isValid, errors } = formState;
+
   const formData = watch();
 
   const debouncedLikes = useDebounce(formData.likes);
@@ -34,19 +36,18 @@ const AdvertisementFilter: React.FC = () => {
       return;
     }
 
-    if (isValid && Object.keys(errors).length === 0) {
-      setFilters({
-        likes_gte: debouncedLikes,
-        views_gte: debouncedViews,
-        price_gte: debouncedPrice,
-        limit: debouncedLimit || 10,
-      });
-    }
+    setFilters({
+      likes_gte: debouncedLikes,
+      views_gte: debouncedViews,
+      price_gte: debouncedPrice,
+      limit: formData.limit || 10,
+    });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedLikes, debouncedLimit, debouncedPrice, debouncedViews, setFilters]);
+  }, [debouncedLikes, debouncedPrice, debouncedViews, debouncedLimit]);
 
   const handleResetFilters = () => {
-    setFilters({ likes_gte: undefined, views_gte: undefined, price_gte: undefined, limit: 10 });
+    reset();
   };
 
   return (
@@ -67,10 +68,29 @@ const AdvertisementFilter: React.FC = () => {
         Фильтр заказов
       </Typography>
       <Box component='form' sx={{ display: 'flex', gap: '20px', flexDirection: 'column' }}>
-        <CustomTextField label='Количество страниц' name='limit' control={control} type='number' />
-        <CustomTextField label='Лайки' name='likes' control={control} type='number' />
-        <CustomTextField label='Просмотры' name='views' control={control} type='number' />
-        <CustomTextField label='Цена' name='price' control={control} type='number' />
+        <CustomStatusSelect control={control} name='limit' title='Количество карточек' statusOptions={limitConst} />
+        <CustomTextField
+          label='Минимальное колличество лайков'
+          name='likes'
+          control={control}
+          type='number'
+          placeholder='Введите число лайков'
+        />
+        <CustomTextField
+          label='Минимальное колличество просмотров'
+          name='views'
+          control={control}
+          type='number'
+          placeholder='Введите число просмотров'
+        />
+        
+        <CustomTextField
+          label='Минимальная цена'
+          name='price'
+          control={control}
+          type='number'
+          placeholder='Введите цену'
+        />
       </Box>
       <Button onClick={handleResetFilters}>Сбросить фильтр</Button>
     </Box>

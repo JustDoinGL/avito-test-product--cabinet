@@ -20,10 +20,10 @@ export type TAdvertisement = {
 export type TAdvertisementUpdate = {
   id: string;
   /* Название. */
-  name: string;
+  name?: string;
   /* Описание. */
   description?: string;
   /* Цена. */
-  price: number;
+  price?: number;
   imageUrl?: string;
 };

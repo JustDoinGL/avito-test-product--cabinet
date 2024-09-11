@@ -6,3 +6,4 @@ export { default as CustomTooltip } from './CustomTooltip';
 export { default as EllipsisText } from './EllipsisText';
 export { default as CustomLoader } from './CustomLoader';
 export { default as CustomImage } from './CustomImage';
+export { default as CustomStatusSelect } from './CustomStatusSelect';

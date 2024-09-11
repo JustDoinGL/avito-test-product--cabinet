@@ -1,6 +1,13 @@
 import { pathOrders } from 'api/const';
 import { TOrder } from 'types/Order';
 
+export type TUpdateOder = {
+  id: string;
+  status?: number;
+  finishedAt?: string;
+  total?: number;
+}
+
 export const fetchOrders = async (queryStringResult: string, options?: { signal?: AbortSignal }): Promise<TOrder[]> => {
   const response = await fetch(`${pathOrders}?${queryStringResult}`, { signal: options?.signal });
   if (!response.ok) {
@@ -19,9 +26,9 @@ export const fetchOrderById = async (id: string, options?: { signal?: AbortSigna
   return data;
 };
 
-export const updateOrder = async (order: TOrder): Promise<TOrder> => {
+export const updateOrder = async (order: TUpdateOder): Promise<TOrder> => {
   const response = await fetch(`${pathOrders}/${order.id}`, {
-    method: 'PUT',
+    method: 'PATCH',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
     },

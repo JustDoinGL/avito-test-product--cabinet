@@ -6,6 +6,11 @@ import { RoutePaths } from 'utils/routes/routes';
 import AdvertisementInfo from './component/AdvertisementInfo';
 import MenuButton from 'components/MenuComponent/MenuButton';
 import { sizes } from 'utils/styles';
+import { useAdvertisementFilterStore } from 'store/useFilterStore';
+import useModalStore from 'store/useModalStore';
+import { toast } from 'react-toastify';
+import useApi from 'hooks/useApi';
+import { deleteAdvertisement } from 'api/advertisements/advertisementsQuery';
 
 interface AdvertisementCardProps {
   content: TAdvertisement;
@@ -15,6 +20,33 @@ interface AdvertisementCardProps {
 
 const AdvertisementCard: React.FC<AdvertisementCardProps> = ({ content, isAdvertisementMenu, count }) => {
   const { id } = content;
+  const { update, setId } = useAdvertisementFilterStore();
+  const { setOpen } = useModalStore();
+  const { execute } = useApi<string, boolean>();
+
+  const menuItems = [
+    {
+      action: (handleClose: () => void) => {
+        setId(id);
+        setOpen(true, 'advertisement');
+        handleClose();
+      },
+      label: 'Редактировать',
+    },
+    {
+      action: async (handleClose: () => void) => {
+        const success = await execute(deleteAdvertisement, id, false);
+        if (success) {
+          toast('Объявление было удалено');
+          handleClose();
+          update(id);
+        } else {
+          toast('Ошибка при удалении объявление.');
+        }
+      },
+      label: 'Удалить',
+    },
+  ];
 
   return (
     <Card
@@ -38,7 +70,7 @@ const AdvertisementCard: React.FC<AdvertisementCardProps> = ({ content, isAdvert
         <AdvertisementInfo content={content} />
       </Link>
 
-      {isAdvertisementMenu && <MenuButton id={id} />}
+      {isAdvertisementMenu && <MenuButton menuItems={menuItems} />}
 
       {count !== undefined && (
         <Box

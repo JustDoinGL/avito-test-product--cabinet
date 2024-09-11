@@ -42,7 +42,7 @@ export const fetchAdvertisementById = async (
   return data;
 };
 
-export const updateAdvertisement = async (advertisement: TAdvertisementUpdate) => {
+export const updateAdvertisement = async (advertisement: TAdvertisementUpdate): Promise<boolean> => {
   const response = await fetch(`${pathAdvertisements}/${advertisement.id}`, {
     method: 'PATCH',
     headers: {

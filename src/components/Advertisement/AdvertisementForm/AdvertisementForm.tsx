@@ -28,15 +28,16 @@ interface AdvertisementFormProps {
 const AdvertisementForm: React.FC<AdvertisementFormProps> = ({ closeModal, isNavigate, id }) => {
   const update = useAdvertisementFilterStore((store) => store.update);
   const { execute: fetchAdvertisement } = useApi<string, TAdvertisement>();
-  const { execute: saveAdvertisement } = useApi<TAdvertisement, TAdvertisementUpdate | TAdvertisement>();
+  const { execute: saveAdvertisement } = useApi<TAdvertisement, TAdvertisement>();
+  const { execute: updateAdvertisement1 } = useApi<TAdvertisementUpdate, boolean>();
   const { control, handleSubmit, formState, setError, reset } = useForm<AdvertisementFormValues>({
     resolver: zodResolver(advertisementSchema),
     mode: 'onChange',
     defaultValues: {
-      description: '',
-      imageUrl: '',
-      name: '',
-      price: 0,
+      description: undefined,
+      imageUrl: undefined,
+      name: undefined,
+      price: undefined,
     },
   });
   const { isDirty, isValid, isSubmitting, errors } = formState;
@@ -65,6 +66,7 @@ const AdvertisementForm: React.FC<AdvertisementFormProps> = ({ closeModal, isNav
   const onSubmit: SubmitHandler<AdvertisementFormValues> = async (data) => {
     await new Promise((resolve) => setTimeout(resolve, 1500)).then(async () => {
       const advertisementId = id || generateUniqueId();
+
       const advertisement: TAdvertisement = {
         id: advertisementId,
         likes: 0,
@@ -73,15 +75,20 @@ const AdvertisementForm: React.FC<AdvertisementFormProps> = ({ closeModal, isNav
         ...data,
       };
 
+      const advertisementUpdate: TAdvertisementUpdate = {
+        id: advertisementId,
+        ...data,
+      };
+
       const success = id
-        ? await saveAdvertisement(updateAdvertisement, advertisement, false)
+        ? await updateAdvertisement1(updateAdvertisement, advertisementUpdate, false)
         : await saveAdvertisement(createAdvertisement, advertisement, false);
 
       if (!success) {
         setError('root', { type: 'manual', message: `Произошла ошибка при выполнении запроса` });
       } else {
         toast('Изменения внесены');
-        update(id ? id : advertisementId);
+        update(advertisementId);
         closeModal();
 
         if (isNavigate) navigate(RoutePaths.Advertisement(advertisementId));
