@@ -26,7 +26,7 @@ const CustomStatusSelect = <TFieldValues extends FieldValues>({
         render={({ field }) => (
           <Select
             labelId={`${String(name)}-label`}
-            value={field.value || ''}
+            value={field.value !== undefined ? field.value : ''} 
             onChange={(event: SelectChangeEvent<number>) => field.onChange(Number(event.target.value))}
             label={title}
           >

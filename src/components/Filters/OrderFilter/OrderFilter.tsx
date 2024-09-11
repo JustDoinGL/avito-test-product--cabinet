@@ -71,7 +71,7 @@ const OrderFilter: React.FC = () => {
         <CustomStatusSelect
           control={control}
           name='status'
-          title='Количество карточек'
+          title='Варинт заказа'
           statusOptions={orderStatusOptions}
         />
       </Box>

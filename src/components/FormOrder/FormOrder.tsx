@@ -80,12 +80,7 @@ const OrderForm: React.FC<OrderFormProps> = ({ id, closeModal }) => {
         Редактирование заказа
       </Typography>
 
-      <CustomStatusSelect
-        control={control}
-        name='status'
-        title='Количество карточек'
-        statusOptions={orderStatusOptions}
-      />
+      <CustomStatusSelect control={control} name='status' title='Варинт заказа' statusOptions={orderStatusOptions} />
 
       <CustomTextField
         control={control}

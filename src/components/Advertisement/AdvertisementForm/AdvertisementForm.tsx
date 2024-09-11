@@ -34,10 +34,10 @@ const AdvertisementForm: React.FC<AdvertisementFormProps> = ({ closeModal, isNav
     resolver: zodResolver(advertisementSchema),
     mode: 'onChange',
     defaultValues: {
-      description: '',
-      imageUrl: '',
-      name: '',
-      price: 0,
+      description: undefined,
+      imageUrl: undefined,
+      name: undefined,
+      price: undefined,
     },
   });
   const { isDirty, isValid, isSubmitting, errors } = formState;
