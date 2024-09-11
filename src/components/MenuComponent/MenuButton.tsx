@@ -16,7 +16,7 @@ const MenuButton: React.FC<MenuButtonProps> = ({ id }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const setOpen = useModalStore((store) => store.setOpen);
-  const { update, setId } = useAdvertisementFilterStore((store) => store);
+  const { update, setId } = useAdvertisementFilterStore();
   const { execute } = useApi<string, boolean>();
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -30,12 +30,12 @@ const MenuButton: React.FC<MenuButtonProps> = ({ id }) => {
 
   const handleEdit = () => {
     setId(id);
-    setOpen(true);
+    setOpen(true, 'advertisement');
     handleClose();
   };
 
   const handleDelete = async () => {
-    const success = await execute(deleteAdvertisement, id);
+    const success = await execute(deleteAdvertisement, id, false);
     if (success) {
       toast('Объявление было удалено');
       handleClose();

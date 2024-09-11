@@ -2,15 +2,13 @@ import React, { useEffect, useRef, useState } from 'react';
 import { TextField, Button, Box } from '@mui/material';
 import useDebounce from 'hooks/useDebounce';
 import { colors, sizes } from 'utils/styles';
-import { useAdvertisementFilterStore, useModalStore } from 'store/index';
+import { useModalStore } from 'store/index';
+import { useAdvertisementFilterStore } from 'store/useFilterStore';
 
-type SearchComponentProps = {
-  isMainPage: boolean;
-};
 
-const SearchComponent: React.FC<SearchComponentProps> = ({ isMainPage }) => {
-  const setOpen = useModalStore((store) => store.setOpen);
+const SearchComponent: React.FC = () => {
   const setFilters = useAdvertisementFilterStore((store) => store.setFilters);
+  const setOpen = useModalStore((store) => store.setOpen);
   const [searchTerm, setSearchTerm] = useState('');
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
   const isFirstRender = useRef(true);
@@ -26,9 +24,9 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ isMainPage }) => {
     }
 
     if (debouncedSearchTerm.length > 0) {
-      setFilters({ text: debouncedSearchTerm });
+      setFilters({ name: debouncedSearchTerm });
     } else {
-      setFilters({ text: undefined });
+      setFilters({ name: undefined });
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -44,20 +42,19 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ isMainPage }) => {
         fullWidth
         sx={{ maxWidth: '300px', borderRadius: '20px' }}
       />
-      {isMainPage && (
-        <Button
-          variant='contained'
-          color='primary'
-          onClick={() => setOpen(true)}
-          sx={{
-            maxWidth: '150px',
-            bgcolor: colors.success,
-            [`@media (max-width: ${sizes.tablet})`]: { display: 'none' },
-          }}
-        >
-          Создать объявление
-        </Button>
-      )}
+
+      <Button
+        variant='contained'
+        color='primary'
+        onClick={() => setOpen(true, 'advertisement')}
+        sx={{
+          maxWidth: '150px',
+          bgcolor: colors.success,
+          [`@media (max-width: ${sizes.tablet})`]: { display: 'none' },
+        }}
+      >
+        Создать объявление
+      </Button>
     </Box>
   );
 };

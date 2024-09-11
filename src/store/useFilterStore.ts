@@ -6,23 +6,19 @@ import { fetchAdvertisementById, fetchAdvertisements } from 'api/advertisements/
 import { fetchOrderById, fetchOrders } from 'api/orders/ordersQuery';
 import { AbortControllerManager } from 'utils/helpers/AbortControllerManager';
 
-type Filters = {
-  likes?: number;
-  views?: number;
-  price?: number;
+export type Filters<T> = T & {
   limit?: number;
-  text?: string;
 };
 
 type WithId = {
   id: string;
 };
 
-type Store<T extends WithId> = {
+type Store<T extends WithId, F> = {
   content: T[];
   loading: boolean;
   error: string | null;
-  filters: Filters;
+  filters: Filters<F>;
   currentPage: number;
   hasMore: boolean;
   update: (id: string) => Promise<void>;
@@ -30,33 +26,24 @@ type Store<T extends WithId> = {
   id: string | null;
   setId: (id: string | null) => void;
 
-  fetchItems: (params: {
-    start: number;
-    limit: number;
-    likes?: number;
-    views?: number;
-    price?: number;
-    text?: string;
-  }) => Promise<void>;
-
+  fetchItems: (params: Filters<F> & { start: number; limit: number }) => Promise<void>;
   loadMoreItems: () => Promise<void>;
-  setFilters: (filters: Partial<Filters>) => void;
+  setFilters: (filters: Partial<Filters<F>>) => void;
 };
 
-export const createStore = <T extends WithId>(
+export const createStore = <T extends WithId, F>(
   fetchItemsApi: (query: string, options?: { signal?: AbortSignal }) => Promise<T[]>,
   fetchItemByIdApi: (id: string, options?: { signal?: AbortSignal }) => Promise<T>,
+  initialFilters: F,
 ) => {
   const abortControllerManager = new AbortControllerManager();
 
-  return create<Store<T>>((set, get) => ({
+  return create<Store<T, F>>((set, get) => ({
     content: [],
     loading: false,
     error: null,
     filters: {
-      likes: undefined,
-      views: undefined,
-      price: undefined,
+      ...initialFilters,
       limit: 10,
       text: undefined,
     },
@@ -68,19 +55,22 @@ export const createStore = <T extends WithId>(
 
     fetchItems: async (params) => {
       set({ loading: true, error: null });
-      const { start, limit, likes, views, price, text } = params;
+      const { start, limit, ...restFilters } = params;
 
       const queryParams: Record<string, number | string> = {
         _start: start,
         _limit: limit,
       };
 
-      if (text !== undefined && text.length > 0) {
-        queryParams.name = text;
-      }
-      if (likes !== undefined && likes > 0) queryParams.likes_gt = likes;
-      if (views !== undefined && views > 0) queryParams.views_gt = views;
-      if (price !== undefined && price > 0) queryParams.price_gt = price;
+      Object.entries(restFilters).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          if (typeof value === 'string' || typeof value === 'number') {
+            queryParams[key] = value;
+          } else {
+            console.warn(`Value for ${key} is not a string or number:`, value);
+          }
+        }
+      });
 
       const queryStringResult = queryString.stringify(queryParams);
       const signal = abortControllerManager.createController();
@@ -149,10 +139,7 @@ export const createStore = <T extends WithId>(
         await get().fetchItems({
           start: start,
           limit: limit,
-          likes: filters.likes,
-          views: filters.views,
-          price: filters.price,
-          text: filters.text,
+          ...filters,
         });
       } catch (error: unknown) {
         set({ error: error instanceof Error ? error.message : 'Unknown error', loading: false });
@@ -168,10 +155,7 @@ export const createStore = <T extends WithId>(
         get().fetchItems({
           start: 0,
           limit: newFilters.limit || 10,
-          likes: newFilters.likes,
-          views: newFilters.views,
-          price: newFilters.price,
-          text: newFilters.text,
+          ...newFilters,
         });
         return { filters: newFilters };
       });
@@ -184,9 +168,7 @@ export const createStore = <T extends WithId>(
         loading: false,
         error: null,
         filters: {
-          likes: undefined,
-          views: undefined,
-          price: undefined,
+          ...initialFilters,
           limit: 10,
           text: undefined,
         },
@@ -197,12 +179,34 @@ export const createStore = <T extends WithId>(
   }));
 };
 
-export const useAdvertisementFilterStore = createStore<TAdvertisement>(
+export type TFiltersOrder = {
+  status?: number;
+  total_gte?: number;
+};
+
+export type TFiltersAdvertisements = {
+  likes_gte?: number;
+  views_gte?: number;
+  price_gte?: number;
+  name?: string;
+};
+
+export const useAdvertisementFilterStore = createStore<TAdvertisement, TFiltersAdvertisements>(
   (query, options) => fetchAdvertisements(query, options),
   (id, options) => fetchAdvertisementById(id, options),
+  {
+    likes_gte: undefined,
+    views_gte: undefined,
+    price_gte: undefined,
+    name: undefined,
+  },
 );
 
-export const useOrderFilterStore = createStore<TOrder>(
+export const useOrderFilterStore = createStore<TOrder, TFiltersOrder>(
   (query, options) => fetchOrders(query, options),
   (id, options) => fetchOrderById(id, options),
+  {
+    status: undefined,
+    total_gte: undefined,
+  },
 );

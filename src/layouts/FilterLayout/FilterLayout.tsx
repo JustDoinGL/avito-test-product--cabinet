@@ -1,11 +1,13 @@
 import { Box } from '@mui/material';
 import { Outlet, useLocation } from 'react-router-dom';
 import SearchComponent from './components/SearchComponent';
-import FilterComponent from './components/FilterComponent/FilterComponents';
 import { sizes } from 'utils/styles';
+import { RoutePaths } from 'utils/routes/routes';
+import { AdvertisementFilter, OrderFilter } from 'components/Filters';
 
 const FilterLayout: React.FC = () => {
   const location = useLocation();
+  const isMainPage = location.pathname === RoutePaths.AllAdvertisements;
 
   return (
     <Box
@@ -17,7 +19,7 @@ const FilterLayout: React.FC = () => {
         margin: '0 auto',
       }}
     >
-      <SearchComponent isMainPage={location.pathname === '/'} />
+      {isMainPage && <SearchComponent />}
       <Box
         sx={{
           display: 'flex',
@@ -36,7 +38,7 @@ const FilterLayout: React.FC = () => {
             [`@media (max-width: ${sizes.tablet})`]: { display: 'none' },
           }}
         >
-          <FilterComponent />
+          {isMainPage ? <AdvertisementFilter /> : <OrderFilter />}
         </Box>
       </Box>
     </Box>

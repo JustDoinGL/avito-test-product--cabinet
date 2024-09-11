@@ -1,4 +1,4 @@
-import { Box, Typography, Button, CardMedia } from '@mui/material';
+import { Box, Typography, Button } from '@mui/material';
 import { colors, sizes } from 'utils/styles';
 import { TAdvertisement } from 'types/Advertisement';
 import { formatDate, formatNumber } from 'utils/helpers';
@@ -6,8 +6,7 @@ import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import InfoItem from './InfoItem';
-import useResponsiveDimensions from 'hooks/useResponsiveDimensions';
-import { BackButton, EllipsisText, CustomDescription, CustomModal } from 'ui';
+import { BackButton, EllipsisText, CustomDescription, CustomModal, CustomImage } from 'ui';
 import { useState } from 'react';
 import AdvertisementForm from 'components/Advertisement/AdvertisementForm/AdvertisementForm';
 import { LoadingButton } from '@mui/lab';
@@ -25,7 +24,6 @@ type ProductDetailsProps = {
 const ProductDetails: React.FC<ProductDetailsProps> = ({ product, handleGoBack }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState<'create' | 'edit'>('create');
-  const dimensions = useResponsiveDimensions('100%', 300);
   const { execute, isLoading } = useApi<string, boolean>();
   const navigate = useNavigate();
 
@@ -40,7 +38,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product, handleGoBack }
   };
 
   const handleDelete = async () => {
-    const success = await execute(deleteAdvertisement, product.id);
+    const success = await execute(deleteAdvertisement, product.id, false);
     if (success) {
       toast('Объявление было удалено');
       navigate(RoutePaths.AllAdvertisements);
@@ -64,37 +62,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product, handleGoBack }
     >
       <BackButton handleGoBack={handleGoBack} />
 
-      <Box
-        sx={{
-          width: dimensions.width,
-          height: dimensions.height,
-          margin: '0 auto',
-          backgroundColor: '#eaeaea',
-          borderRadius: 2,
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          color: '#888',
-          fontSize: 18,
-          mb: 3,
-          overflow: 'hidden',
-        }}
-      >
-        {product.imageUrl ? (
-          <CardMedia
-            component='img'
-            image={product.imageUrl}
-            alt={product.name}
-            sx={{
-              maxWidth: '100%',
-              maxHeight: '100%',
-              objectFit: 'cover',
-            }}
-          />
-        ) : (
-          <Typography variant='body1'>Изображение отсутствует</Typography>
-        )}
-      </Box>
+      <CustomImage imageUrl={product.imageUrl} alt={product.name} height={200} />
 
       <EllipsisText
         sx={{ marginBottom: 2, textAlign: 'center', fontSize: '2rem', fontWeight: '700' }}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card } from '@mui/material';
+import { Box, Card } from '@mui/material';
 import { TAdvertisement } from 'types/Advertisement';
 import { Link } from 'react-router-dom';
 import { RoutePaths } from 'utils/routes/routes';
@@ -9,10 +9,11 @@ import { sizes } from 'utils/styles';
 
 interface AdvertisementCardProps {
   content: TAdvertisement;
+  count?: number;
   isAdvertisementMenu?: boolean;
 }
 
-const AdvertisementCard: React.FC<AdvertisementCardProps> = ({ content, isAdvertisementMenu }) => {
+const AdvertisementCard: React.FC<AdvertisementCardProps> = ({ content, isAdvertisementMenu, count }) => {
   const { id } = content;
 
   return (
@@ -38,6 +39,24 @@ const AdvertisementCard: React.FC<AdvertisementCardProps> = ({ content, isAdvert
       </Link>
 
       {isAdvertisementMenu && <MenuButton id={id} />}
+
+      {count !== undefined && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 8,
+            right: 8,
+            backgroundColor: 'primary.main',
+            color: 'white',
+            borderRadius: '12px',
+            padding: '4px 8px',
+            fontSize: '0.875rem',
+            fontWeight: 'bold',
+          }}
+        >
+          {`Количество заказов: ${count}`}
+        </Box>
+      )}
     </Card>
   );
 };

@@ -1,19 +1,16 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { Box, Button, Typography } from '@mui/material';
 import CustomTextField from 'ui/CustomTextField';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { FilterForm, filterSchema } from './FilterComponent.type';
+import { FilterForm, filterSchema } from './AdvertisementFilter.type';
 import useDebounce from 'hooks/useDebounce';
-import { useAdvertisementFilterStore } from 'store/index';
+import { useAdvertisementFilterStore } from 'store/useFilterStore';
 
-const FilterComponent: React.FC = () => {
+const AdvertisementFilter: React.FC = () => {
   const isFirstRender = useRef(true);
-  const {
-    control,
-    watch,
-    formState: { isValid, errors },
-  } = useForm<FilterForm>({
+  const { setFilters } = useAdvertisementFilterStore();
+  const { control, watch, formState } = useForm<FilterForm>({
     resolver: zodResolver(filterSchema),
     mode: 'onChange',
     defaultValues: {
@@ -23,9 +20,8 @@ const FilterComponent: React.FC = () => {
       limit: 10,
     },
   });
-
+  const { isValid, errors } = formState;
   const formData = watch();
-  const setFilters = useAdvertisementFilterStore((state) => state.setFilters);
 
   const debouncedLikes = useDebounce(formData.likes);
   const debouncedViews = useDebounce(formData.views);
@@ -40,9 +36,9 @@ const FilterComponent: React.FC = () => {
 
     if (isValid && Object.keys(errors).length === 0) {
       setFilters({
-        likes: debouncedLikes,
-        views: debouncedViews,
-        price: debouncedPrice,
+        likes_gte: debouncedLikes,
+        views_gte: debouncedViews,
+        price_gte: debouncedPrice,
         limit: debouncedLimit || 10,
       });
     }
@@ -50,7 +46,7 @@ const FilterComponent: React.FC = () => {
   }, [debouncedLikes, debouncedLimit, debouncedPrice, debouncedViews, setFilters]);
 
   const handleResetFilters = () => {
-    setFilters({ likes: undefined, views: undefined, price: undefined, limit: 10, });
+    setFilters({ likes_gte: undefined, views_gte: undefined, price_gte: undefined, limit: 10 });
   };
 
   return (
@@ -68,7 +64,7 @@ const FilterComponent: React.FC = () => {
       }}
     >
       <Typography variant='h6' textAlign='center'>
-        Фильтр
+        Фильтр заказов
       </Typography>
       <Box component='form' sx={{ display: 'flex', gap: '20px', flexDirection: 'column' }}>
         <CustomTextField label='Количество страниц' name='limit' control={control} type='number' />
@@ -81,4 +77,4 @@ const FilterComponent: React.FC = () => {
   );
 };
 
-export default FilterComponent;
+export default AdvertisementFilter;

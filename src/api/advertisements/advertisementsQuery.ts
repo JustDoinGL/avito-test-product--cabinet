@@ -13,17 +13,13 @@ export const fetchAdvertisements = async (
   return data;
 };
 
-export const createAdvertisement = async (
-  advertisement: TAdvertisement,
-  options?: { signal?: AbortSignal },
-): Promise<TAdvertisement> => {
+export const createAdvertisement = async (advertisement: TAdvertisement): Promise<TAdvertisement> => {
   const response = await fetch(`${pathAdvertisements}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
     },
     body: JSON.stringify(advertisement),
-    signal: options?.signal,
   });
 
   if (!response.ok) {
@@ -46,17 +42,13 @@ export const fetchAdvertisementById = async (
   return data;
 };
 
-export const updateAdvertisement = async (
-  advertisement: TAdvertisementUpdate,
-  options?: { signal?: AbortSignal },
-) => {
+export const updateAdvertisement = async (advertisement: TAdvertisementUpdate) => {
   const response = await fetch(`${pathAdvertisements}/${advertisement.id}`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
     },
     body: JSON.stringify(advertisement),
-    signal: options?.signal,
   });
 
   if (!response.ok) {
@@ -67,10 +59,9 @@ export const updateAdvertisement = async (
   return data;
 };
 
-export const deleteAdvertisement = async (id: string, options?: { signal?: AbortSignal }): Promise<boolean> => {
+export const deleteAdvertisement = async (id: string): Promise<boolean> => {
   const response = await fetch(`${pathAdvertisements}/${id}`, {
     method: 'DELETE',
-    signal: options?.signal,
   });
 
   if (!response.ok) {
