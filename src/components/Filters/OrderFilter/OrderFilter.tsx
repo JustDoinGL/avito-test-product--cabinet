@@ -1,16 +1,17 @@
 import React, { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { Box, Button, Typography } from '@mui/material';
-import CustomTextField from 'ui/CustomTextField';
 import { zodResolver } from '@hookform/resolvers/zod';
 import useDebounce from 'hooks/useDebounce';
 import { OrderFilterForm, orderFilterSchema } from './OrderFilter.types';
 import { useOrderFilterStore } from 'store/useFilterStore';
+import { limitConst } from 'utils/const/Limit';
+import CustomStatusSelect from 'ui/CustomStatusSelect';
 
 const OrderFilter: React.FC = () => {
   const isFirstRender = useRef(true);
   const { setFilters } = useOrderFilterStore();
-  const { control, watch, formState } = useForm<OrderFilterForm>({
+  const { control, watch, formState, reset } = useForm<OrderFilterForm>({
     resolver: zodResolver(orderFilterSchema),
     mode: 'onChange',
     defaultValues: {
@@ -40,10 +41,10 @@ const OrderFilter: React.FC = () => {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedStatus, debouncedLimit, debouncedTotal, setFilters]);
+  }, [debouncedStatus, debouncedLimit, debouncedTotal]);
 
   const handleResetFilters = () => {
-    setFilters({ status: undefined, total_gte: undefined, limit: 10 });
+    reset();
   };
 
   return (
@@ -64,9 +65,10 @@ const OrderFilter: React.FC = () => {
         Фильтр заказов
       </Typography>
       <Box component='form' sx={{ display: 'flex', gap: '20px', flexDirection: 'column' }}>
-        <CustomTextField label='Количество записей' name='limit' control={control} type='number' />
-        <CustomTextField label='Статус' name='status' control={control} type='number' />
-        <CustomTextField label='Сумма заказа' name='total' control={control} type='number' />
+        <CustomStatusSelect control={control} name='limit' title='Количество карточек' statusOptions={limitConst} />
+
+        {/* <CustomTextField label='Статус' name='status' control={control} type='number' />
+        <CustomTextField label='Сумма заказа' name='total' control={control} type='number' /> */}
       </Box>
       <Button onClick={handleResetFilters}>Сбросить фильтр</Button>
     </Box>
